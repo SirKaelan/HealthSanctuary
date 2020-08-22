@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HealthSanctuary.Data.Migrations
 {
-    [DbContext(typeof(WorkoutContext))]
+    [DbContext(typeof(HealthSanctuaryContext))]
     partial class WorkoutContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

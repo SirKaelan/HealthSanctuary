@@ -1,5 +1,8 @@
-﻿using HealthSanctuary.Data.Context;
-using HealthSanctuary.Data.Entities;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using HealthSanctuary.Core.Models;
+using HealthSanctuary.Core.Repositories;
 using HealthSanctuary.Web.Models.Workouts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,55 +12,73 @@ namespace HealthSanctuary.Web.Controllers
     [Route("api/[controller]")]
     public class WorkoutsController : ControllerBase
     {
-        private readonly WorkoutContext _workoutContext;
+        private readonly IWorkoutsRepository _workoutsRepository;
 
-        public WorkoutsController(WorkoutContext workoutContext)
+        public WorkoutsController(IWorkoutsRepository workoutsRepository)
         {
-            _workoutContext = workoutContext;
+            _workoutsRepository = workoutsRepository;
         }
 
         [HttpGet]
-        public IActionResult GetWorkouts()
+        public async Task<IActionResult> GetWorkouts()
         {
-            var workout = new Workout
-            {
-                Name = "asd"
-            };
+            var workouts = await _workoutsRepository.GetWorkouts();
+            var response = workouts.Select(x => MapToWorkoutResponse(x)).ToList();
 
-            _workoutContext.Workouts.Add(workout);
-            _workoutContext.SaveChanges();
-
-            return Ok();
+            return Ok(response);
         }
 
         [HttpGet("{workoutId}")]
-        public IActionResult GetWorkout([FromRoute] string workoutId)
+        public async Task<IActionResult> GetWorkout([FromRoute] int workoutId)
         {
-            var workout = new WorkoutResponse
-            {
-                Name = "Full body workout",
-                Time = 5
-            };
-
-            return Ok(workout);
+            var workout = await _workoutsRepository.GetWorkout(workoutId);
+            var response = MapToWorkoutResponse(workout);
+            return Ok(response);
         }
 
         [HttpPost]
-        public IActionResult CreateWorkout([FromBody] WorkoutRequest workout)
+        public async Task<IActionResult> CreateWorkout([FromBody] WorkoutRequest request)
         {
-            return Ok();
+            var workout = new Workout { Name = request.Name };
+            _workoutsRepository.AddWorkout(workout);
+            await _workoutsRepository.SaveChanges();
+
+            var response = new WorkoutIdResponse(workout.Id);
+
+            return Ok(response);
         }
 
         [HttpPut("{workoutId}")]
-        public IActionResult UpdateWorkout([FromRoute] string workoutId, [FromBody] WorkoutRequest workout)
+        public async Task<IActionResult> UpdateWorkout([FromRoute] int workoutId, [FromBody] WorkoutRequest request)
         {
+            var workout = new Workout
+            {
+                Id = workoutId,
+                Name = request.Name
+            };
+
+            _workoutsRepository.UpdateWorkout(workout);
+            await _workoutsRepository.SaveChanges();
+
             return Ok();
         }
 
         [HttpDelete("{workoutId}")]
-        public IActionResult DeleteWorkout([FromRoute] string workoutId)
+        public async Task<IActionResult> DeleteWorkout([FromRoute] int workoutId)
         {
+            _workoutsRepository.DeleteWorkout(workoutId);
+            await _workoutsRepository.SaveChanges();
+
             return Ok();
+        }
+
+        private WorkoutResponse MapToWorkoutResponse(Workout workout)
+        {
+            return new WorkoutResponse
+            {
+                Id = workout.Id,
+                Name = workout.Name,
+            };
         }
     }
 }

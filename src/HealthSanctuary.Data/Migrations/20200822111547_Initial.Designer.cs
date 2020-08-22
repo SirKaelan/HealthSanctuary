@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HealthSanctuary.Data.Migrations
 {
-    [DbContext(typeof(WorkoutContext))]
+    [DbContext(typeof(HealthSanctuaryContext))]
     [Migration("20200822111547_Initial")]
     partial class Initial
     {

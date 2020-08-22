@@ -1,4 +1,4 @@
-﻿namespace HealthSanctuary.Data.Entities
+﻿namespace HealthSanctuary.Core.Models
 {
     public class Workout
     {

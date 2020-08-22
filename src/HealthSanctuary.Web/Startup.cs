@@ -1,4 +1,6 @@
+using HealthSanctuary.Core.Repositories;
 using HealthSanctuary.Data.Context;
+using HealthSanctuary.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -20,10 +22,12 @@ namespace HealthSanctuary.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<WorkoutContext>(o =>
+            services.AddDbContext<HealthSanctuaryContext>(o =>
             {
                 o.UseSqlServer("Server=PESHOV2\\SQLEXPRESS;Database=HealthSanctuary;Trusted_Connection=True;", b => b.MigrationsAssembly("HealthSanctuary.Data"));
             });
+
+            services.AddTransient<IWorkoutsRepository, WorkoutsRepository>();
 
             services.AddControllersWithViews();
             services.AddSpaStaticFiles(configuration =>
