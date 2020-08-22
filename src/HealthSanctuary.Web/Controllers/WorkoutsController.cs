@@ -1,4 +1,6 @@
-﻿using HealthSanctuary.Web.Models.Workouts;
+﻿using HealthSanctuary.Data.Context;
+using HealthSanctuary.Data.Entities;
+using HealthSanctuary.Web.Models.Workouts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HealthSanctuary.Web.Controllers
@@ -7,9 +9,24 @@ namespace HealthSanctuary.Web.Controllers
     [Route("api/[controller]")]
     public class WorkoutsController : ControllerBase
     {
+        private readonly WorkoutContext _workoutContext;
+
+        public WorkoutsController(WorkoutContext workoutContext)
+        {
+            _workoutContext = workoutContext;
+        }
+
         [HttpGet]
         public IActionResult GetWorkouts()
         {
+            var workout = new Workout
+            {
+                Name = "asd"
+            };
+
+            _workoutContext.Workouts.Add(workout);
+            _workoutContext.SaveChanges();
+
             return Ok();
         }
 
@@ -42,10 +59,5 @@ namespace HealthSanctuary.Web.Controllers
         {
             return Ok();
         }
-    }
-
-    public class Workout
-    {
-        public string Name { get; set; }
     }
 }
