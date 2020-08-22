@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using HealthSanctuary.Core.Models;
 using HealthSanctuary.Core.Repositories;
@@ -39,7 +38,7 @@ namespace HealthSanctuary.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateWorkout([FromBody] WorkoutRequest request)
         {
-            var workout = new Workout { Name = request.Name };
+            var workout = new Workout { Title = request.Title };
             _workoutsRepository.AddWorkout(workout);
             await _workoutsRepository.SaveChanges();
 
@@ -54,7 +53,7 @@ namespace HealthSanctuary.Web.Controllers
             var workout = new Workout
             {
                 Id = workoutId,
-                Name = request.Name
+                Title = request.Title
             };
 
             _workoutsRepository.UpdateWorkout(workout);
@@ -77,7 +76,7 @@ namespace HealthSanctuary.Web.Controllers
             return new WorkoutResponse
             {
                 Id = workout.Id,
-                Name = workout.Name,
+                Name = workout.Title,
             };
         }
     }
