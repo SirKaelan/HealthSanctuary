@@ -1,6 +1,8 @@
 using HealthSanctuary.Core.Repositories;
 using HealthSanctuary.Data.Context;
 using HealthSanctuary.Data.Repositories;
+using HealthSanctuary.Web.Mappers.WorkoutExercises;
+using HealthSanctuary.Web.Mappers.Workouts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -28,6 +30,8 @@ namespace HealthSanctuary.Web
             });
 
             services.AddTransient<IWorkoutsRepository, WorkoutsRepository>();
+            services.AddTransient<IWorkoutExerciseMapper, WorkoutExerciseMapper>();
+            services.AddTransient<IWorkoutMapper, WorkoutMapper>();
 
             services.AddControllersWithViews();
             services.AddSpaStaticFiles(configuration =>
