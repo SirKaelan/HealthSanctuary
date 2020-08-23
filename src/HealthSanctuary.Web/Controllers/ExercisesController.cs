@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using HealthSanctuary.Core.Models;
-using HealthSanctuary.Core.Repositories;
+using HealthSanctuary.Core.Services.Exercises;
+using HealthSanctuary.Web.Mappers.Exercises;
 using HealthSanctuary.Web.Models.Exercises;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,18 +11,20 @@ namespace HealthSanctuary.Web.Controllers
     [Route("api/[controller]")]
     public class ExercisesController : ControllerBase
     {
-        private readonly IExercisesRepository _exercisesRepository;
+        private readonly IExerciseMapper _exerciseMapper;
+        private readonly IExerciseService _exerciseService;
 
-        public ExercisesController(IExercisesRepository exercisesRepository)
+        public ExercisesController(IExerciseService exerciseService, IExerciseMapper exerciseMapper)
         {
-            _exercisesRepository = exercisesRepository;
+            _exerciseService = exerciseService;
+            _exerciseMapper = exerciseMapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetExercises()
         {
-            var exercises = await _exercisesRepository.GetMany();
-            var response = exercises.Select(x => MapToExerciseResponse(x)).ToList();
+            var exercises = await _exerciseService.GetExercises();
+            var response = exercises.Select(x => _exerciseMapper.ToResponse(x)).ToList();
 
             return Ok(response);
         }
@@ -30,8 +32,8 @@ namespace HealthSanctuary.Web.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetExercise([FromRoute] int id)
         {
-            var exercise = await _exercisesRepository.GetOne(id);
-            var response = MapToExerciseResponse(exercise);
+            var exercise = await _exerciseService.GetExercise(id);
+            var response = _exerciseMapper.ToResponse(exercise);
 
             return Ok(response);
         }
@@ -39,11 +41,11 @@ namespace HealthSanctuary.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateExercise([FromBody] ExerciseRequest request)
         {
-            var exercise = MapToExercise(request);
-            _exercisesRepository.CreateOne(exercise);
-            await _exercisesRepository.SaveChanges();
+            var exercise = _exerciseMapper.ToEntity(request);
 
-            var response = new ExerciseIdResponse(exercise.Id);
+            var exerciseId = await _exerciseService.CreateExercise(exercise);
+
+            var response = new ExerciseIdResponse(exerciseId);
 
             return Ok(response);
         }
@@ -51,16 +53,9 @@ namespace HealthSanctuary.Web.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateExercise([FromRoute] int id, [FromBody] ExerciseRequest request)
         {
-            var exercise = new Exercise
-            {
-                Id = id,
-                Description = request.Description,
-                Name = request.Name,
-                VideoLink = request.VideoLink
-            };
+            var exercise = _exerciseMapper.ToEntity(id, request);
 
-            _exercisesRepository.UpdateOne(exercise);
-            await _exercisesRepository.SaveChanges();
+            await _exerciseService.UpdateExercise(exercise);
 
             return Ok();
         }
@@ -68,31 +63,9 @@ namespace HealthSanctuary.Web.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteExercise([FromRoute] int id)
         {
-            _exercisesRepository.DeleteOne(id);
-            await _exercisesRepository.SaveChanges();
+            await _exerciseService.DeleteExercise(id);
 
             return Ok();
-        }
-
-        private ExerciseResponse MapToExerciseResponse(Exercise exercise)
-        {
-            return new ExerciseResponse
-            {
-                Id = exercise.Id,
-                Name = exercise.Name,
-                Description = exercise.Description,
-                VideoLink = exercise.VideoLink
-            };
-        }
-
-        private Exercise MapToExercise(ExerciseRequest exercise)
-        {
-            return new Exercise
-            {
-                Name = exercise.Name,
-                Description = exercise.Description,
-                VideoLink = exercise.VideoLink
-            };
         }
     }
 }

@@ -24,7 +24,7 @@ namespace HealthSanctuary.Web.Mappers.Workouts
                 Description = workout.Description,
                 Duration = workout.Duration.TotalMinutes,
                 VideoLink = workout.VideoLink,
-                //Exercises = workout.Exercises.Select(x => _workoutExerciseMapper.ToResponse(x)).ToList()
+                Exercises = workout.Exercises.Select(x => _workoutExerciseMapper.ToResponse(x)).ToList(),
             };
         }
 
@@ -37,7 +37,7 @@ namespace HealthSanctuary.Web.Mappers.Workouts
                 Description = workout.Description,
                 Duration = TimeSpan.FromMinutes(workout.Duration),
                 VideoLink = workout.VideoLink,
-                //Exercises = workout.Exercises.Select(x => _workoutExerciseMapper.ToEntity(x)).ToList(),
+                Exercises = workout.Exercises.Select(x => _workoutExerciseMapper.ToEntity(x)).ToList(),
             };
         }
 

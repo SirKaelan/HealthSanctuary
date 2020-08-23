@@ -1,7 +1,9 @@
 using HealthSanctuary.Core.Repositories;
+using HealthSanctuary.Core.Services.Exercises;
 using HealthSanctuary.Core.Services.Workouts;
 using HealthSanctuary.Data.Context;
 using HealthSanctuary.Data.Repositories;
+using HealthSanctuary.Web.Mappers.Exercises;
 using HealthSanctuary.Web.Mappers.WorkoutExercises;
 using HealthSanctuary.Web.Mappers.Workouts;
 using Microsoft.AspNetCore.Builder;
@@ -87,17 +89,20 @@ namespace HealthSanctuary.Web
         private void AddRepositories(IServiceCollection services)
         {
             services.AddTransient<IWorkoutsRepository, WorkoutsRepository>();
+            services.AddTransient<IExercisesRepository, ExercisesRepository>();
         }
 
         private void AddMappers(IServiceCollection services)
         {
             services.AddTransient<IWorkoutMapper, WorkoutMapper>();
             services.AddTransient<IWorkoutExerciseMapper, WorkoutExerciseMapper>();
+            services.AddTransient<IExerciseMapper, ExerciseMapper>();
         }
 
         private void AddServices(IServiceCollection services)
         {
             services.AddTransient<IWorkoutService, WorkoutService>();
+            services.AddTransient<IExerciseService, ExerciseService>();
         }
     }
 }

@@ -7,6 +7,6 @@ namespace HealthSanctuary.Web.Models.WorkoutExercises
         public int Id { get; set; }
         public int Sets { get; set; }
         public int Reps { get; set; }
-        public ExerciseResponse Exercise{ get; set; }
+        public ExerciseResponse Exercise { get; set; }
     }
 }
