@@ -1,4 +1,5 @@
 using HealthSanctuary.Core.Repositories;
+using HealthSanctuary.Core.Services.Workouts;
 using HealthSanctuary.Data.Context;
 using HealthSanctuary.Data.Repositories;
 using HealthSanctuary.Web.Mappers.WorkoutExercises;
@@ -24,14 +25,10 @@ namespace HealthSanctuary.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<HealthSanctuaryContext>(o =>
-            {
-                o.UseSqlServer("Server=PESHOV2\\SQLEXPRESS;Database=HealthSanctuary;Trusted_Connection=True;", b => b.MigrationsAssembly("HealthSanctuary.Data"));
-            });
-
-            services.AddTransient<IWorkoutsRepository, WorkoutsRepository>();
-            services.AddTransient<IWorkoutExerciseMapper, WorkoutExerciseMapper>();
-            services.AddTransient<IWorkoutMapper, WorkoutMapper>();
+            AddDbContext(services);
+            AddRepositories(services);
+            AddMappers(services);
+            AddServices(services);
 
             services.AddControllersWithViews();
             services.AddSpaStaticFiles(configuration =>
@@ -77,6 +74,30 @@ namespace HealthSanctuary.Web
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+        }
+
+        private void AddDbContext(IServiceCollection services)
+        {
+            services.AddDbContext<HealthSanctuaryContext>(o =>
+            {
+                o.UseSqlServer("Server=PESHOV2\\SQLEXPRESS;Database=HealthSanctuary;Trusted_Connection=True;", b => b.MigrationsAssembly("HealthSanctuary.Data"));
+            });
+        }
+
+        private void AddRepositories(IServiceCollection services)
+        {
+            services.AddTransient<IWorkoutsRepository, WorkoutsRepository>();
+        }
+
+        private void AddMappers(IServiceCollection services)
+        {
+            services.AddTransient<IWorkoutMapper, WorkoutMapper>();
+            services.AddTransient<IWorkoutExerciseMapper, WorkoutExerciseMapper>();
+        }
+
+        private void AddServices(IServiceCollection services)
+        {
+            services.AddTransient<IWorkoutService, WorkoutService>();
         }
     }
 }
