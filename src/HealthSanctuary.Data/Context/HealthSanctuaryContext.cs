@@ -20,6 +20,23 @@ namespace HealthSanctuary.Data.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Workout>()
+                .Property(x => x.Title)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            modelBuilder.Entity<Workout>()
+                .Property(x => x.Description)
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<Workout>()
+                .Property(x => x.Duration)
+                .IsRequired();
+
+            modelBuilder.Entity<Workout>()
+                .Property(x => x.VideoLink)
+                .HasMaxLength(100);
+
             modelBuilder.Entity<WorkoutExercise>()
                 .HasKey(we => new { we.WorkoutId, we.ExerciseId });
 
@@ -32,6 +49,27 @@ namespace HealthSanctuary.Data.Context
                 .HasOne(we => we.Exercise)
                 .WithMany(e => e.WorkoutExercises)
                 .HasForeignKey(we => we.ExerciseId);
+
+            modelBuilder.Entity<WorkoutExercise>()
+                .Property(x => x.Reps)
+                .IsRequired();
+
+            modelBuilder.Entity<WorkoutExercise>()
+                .Property(x => x.Sets)
+                .IsRequired();
+
+            modelBuilder.Entity<Exercise>()
+                .Property(x => x.Name)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            modelBuilder.Entity<Exercise>()
+                .Property(x => x.Description)
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<Exercise>()
+                .Property(x => x.VideoLink)
+                .HasMaxLength(100);
         }
     }
 }
