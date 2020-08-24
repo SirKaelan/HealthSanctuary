@@ -20,6 +20,13 @@ namespace HealthSanctuary.Data.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            WorkoutConfiguration(modelBuilder);
+            WorkoutExerciseConfiguration(modelBuilder);
+            ExerciseConfiguration(modelBuilder);
+        }
+
+        private void WorkoutConfiguration(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<Workout>()
                 .Property(x => x.Title)
                 .HasMaxLength(50)
@@ -36,9 +43,12 @@ namespace HealthSanctuary.Data.Context
             modelBuilder.Entity<Workout>()
                 .Property(x => x.VideoLink)
                 .HasMaxLength(100);
+        }
 
+        private void WorkoutExerciseConfiguration(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<WorkoutExercise>()
-                .HasKey(we => new { we.WorkoutId, we.ExerciseId });
+               .HasKey(we => new { we.WorkoutId, we.ExerciseId });
 
             modelBuilder.Entity<WorkoutExercise>()
                 .HasOne(we => we.Workout)
@@ -57,7 +67,10 @@ namespace HealthSanctuary.Data.Context
             modelBuilder.Entity<WorkoutExercise>()
                 .Property(x => x.Sets)
                 .IsRequired();
+        }
 
+        private void ExerciseConfiguration(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<Exercise>()
                 .Property(x => x.Name)
                 .HasMaxLength(50)
