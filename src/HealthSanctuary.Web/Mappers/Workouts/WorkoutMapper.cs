@@ -17,6 +17,11 @@ namespace HealthSanctuary.Web.Mappers.Workouts
 
         public WorkoutResponse ToResponse(Workout workout)
         {
+            if (workout == null)
+            {
+                return null;
+            }
+
             return new WorkoutResponse
             {
                 WorkoutId = workout.WorkoutId,
