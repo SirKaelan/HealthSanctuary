@@ -5,11 +5,12 @@ namespace HealthSanctuary.Core.Models
 {
     public class Workout
     {
-        public int Id { get; set; }
+        public int WorkoutId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public TimeSpan Duration { get; set; }
         public string VideoLink { get; set; }
-        public ICollection<WorkoutExercise> Exercises { get; set; }
+
+        public List<WorkoutExercise> WorkoutExercises { get; set; }
     }
 }

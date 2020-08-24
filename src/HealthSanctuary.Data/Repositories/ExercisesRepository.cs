@@ -23,7 +23,7 @@ namespace HealthSanctuary.Data.Repositories
 
         public async Task<Exercise> GetOne(int id)
         {
-            return await _context.Exercises.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Exercises.FirstOrDefaultAsync(x => x.ExerciseId == id);
         }
 
         public void CreateOne(Exercise exercise)
@@ -40,7 +40,7 @@ namespace HealthSanctuary.Data.Repositories
         {
             var exercise = new Exercise
             {
-                Id = id
+                ExerciseId = id
             };
 
             _context.Exercises.Remove(exercise);

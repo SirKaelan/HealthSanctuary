@@ -29,10 +29,10 @@ namespace HealthSanctuary.Web.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetExercise([FromRoute] int id)
+        [HttpGet("{exerciseId}")]
+        public async Task<IActionResult> GetExercise([FromRoute] int exerciseId)
         {
-            var exercise = await _exerciseService.GetExercise(id);
+            var exercise = await _exerciseService.GetExercise(exerciseId);
             var response = _exerciseMapper.ToResponse(exercise);
 
             return Ok(response);
@@ -50,20 +50,20 @@ namespace HealthSanctuary.Web.Controllers
             return Ok(response);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateExercise([FromRoute] int id, [FromBody] ExerciseRequest request)
+        [HttpPut("{exerciseId}")]
+        public async Task<IActionResult> UpdateExercise([FromRoute] int exerciseId, [FromBody] ExerciseRequest request)
         {
-            var exercise = _exerciseMapper.ToEntity(id, request);
+            var exercise = _exerciseMapper.ToEntity(exerciseId, request);
 
             await _exerciseService.UpdateExercise(exercise);
 
             return Ok();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteExercise([FromRoute] int id)
+        [HttpDelete("{exerciseId}")]
+        public async Task<IActionResult> DeleteExercise([FromRoute] int exerciseId)
         {
-            await _exerciseService.DeleteExercise(id);
+            await _exerciseService.DeleteExercise(exerciseId);
 
             return Ok();
         }

@@ -2,11 +2,11 @@
 {
     public class WorkoutIdResponse
     {
-        public WorkoutIdResponse(int id)
+        public WorkoutIdResponse(int workoutId)
         {
-            Id = id;
+            WorkoutId = workoutId;
         }
 
-        public int Id { get; set; }
+        public int WorkoutId { get; set; }
     }
 }

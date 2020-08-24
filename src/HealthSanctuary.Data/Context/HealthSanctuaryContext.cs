@@ -20,25 +20,18 @@ namespace HealthSanctuary.Data.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Workout>()
-                .HasMany(w => w.Exercises)
-                .WithOne(we => we.Workout)
-                .IsRequired();
+            modelBuilder.Entity<WorkoutExercise>()
+                .HasKey(we => new { we.WorkoutId, we.ExerciseId });
+
+            modelBuilder.Entity<WorkoutExercise>()
+                .HasOne(we => we.Workout)
+                .WithMany(w => w.WorkoutExercises)
+                .HasForeignKey(we => we.WorkoutId);
 
             modelBuilder.Entity<WorkoutExercise>()
                 .HasOne(we => we.Exercise)
                 .WithMany(e => e.WorkoutExercises)
-                .IsRequired();
-
-            modelBuilder.Entity<WorkoutExercise>()
-                .HasOne(we => we.Workout)
-                .WithMany(w => w.Exercises)
-                .IsRequired();
-
-            modelBuilder.Entity<Exercise>()
-                .HasMany(e => e.WorkoutExercises)
-                .WithOne(we => we.Exercise)
-                .IsRequired();
+                .HasForeignKey(we => we.ExerciseId);
         }
     }
 }

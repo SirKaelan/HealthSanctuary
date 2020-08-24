@@ -18,12 +18,20 @@ namespace HealthSanctuary.Data.Repositories
 
         public async Task<List<Workout>> GetWorkouts()
         {
-            return await _context.Workouts.ToListAsync();
+            return await _context
+                .Workouts
+                .Include(x => x.WorkoutExercises)
+                .ThenInclude(x => x.Exercise)
+                .ToListAsync();
         }
 
         public async Task<Workout> GetWorkout(int workoutId)
         {
-            return await _context.Workouts.FirstOrDefaultAsync(x => x.Id == workoutId);
+            return await _context
+                .Workouts
+                .Include(x => x.WorkoutExercises)
+                .ThenInclude(x => x.Exercise)
+                .FirstOrDefaultAsync(x => x.WorkoutId == workoutId);
         }
 
         public void AddWorkout(Workout workout)
@@ -40,7 +48,7 @@ namespace HealthSanctuary.Data.Repositories
         {
             var workout = new Workout
             {
-                Id = workoutId
+                WorkoutId = workoutId
             };
 
             _context.Workouts.Remove(workout);

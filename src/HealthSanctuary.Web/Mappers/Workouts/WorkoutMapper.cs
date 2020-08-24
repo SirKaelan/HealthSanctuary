@@ -19,12 +19,12 @@ namespace HealthSanctuary.Web.Mappers.Workouts
         {
             return new WorkoutResponse
             {
-                Id = workout.Id,
+                WorkoutId = workout.WorkoutId,
                 Title = workout.Title,
                 Description = workout.Description,
                 Duration = workout.Duration.TotalMinutes,
                 VideoLink = workout.VideoLink,
-                Exercises = workout.Exercises.Select(x => _workoutExerciseMapper.ToResponse(x)).ToList(),
+                WorkoutExercises = workout.WorkoutExercises.Select(x => _workoutExerciseMapper.ToResponse(x)).ToList(),
             };
         }
 
@@ -32,12 +32,12 @@ namespace HealthSanctuary.Web.Mappers.Workouts
         {
             return new Workout
             {
-                Id = workoutId,
+                WorkoutId = workoutId,
                 Title = workout.Title,
                 Description = workout.Description,
                 Duration = TimeSpan.FromMinutes(workout.Duration),
                 VideoLink = workout.VideoLink,
-                Exercises = workout.Exercises.Select(x => _workoutExerciseMapper.ToEntity(x)).ToList(),
+                WorkoutExercises = workout.WorkoutExercises.Select(x => _workoutExerciseMapper.ToEntity(workoutId, x.ExerciseId, x)).ToList(),
             };
         }
 

@@ -30,7 +30,7 @@ namespace HealthSanctuary.Core.Services.Workouts
             _workoutsRepository.AddWorkout(workout);
             await _workoutsRepository.SaveChanges();
 
-            return workout.Id;
+            return workout.WorkoutId;
         }
 
         public async Task UpdateWorkout(Workout workout)

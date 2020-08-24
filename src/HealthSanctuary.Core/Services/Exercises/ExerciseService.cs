@@ -29,7 +29,7 @@ namespace HealthSanctuary.Core.Services.Exercises
             _exercisesRepository.CreateOne(exercise);
             await _exercisesRepository.SaveChanges();
 
-            return exercise.Id;
+            return exercise.ExerciseId;
         }
 
         public async Task UpdateExercise(Exercise exercise)

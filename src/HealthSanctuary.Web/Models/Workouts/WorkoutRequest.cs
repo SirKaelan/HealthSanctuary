@@ -10,6 +10,6 @@ namespace HealthSanctuary.Web.Models.Workouts
         public string Description { get; set; }
         public double Duration { get; set; }
         public string VideoLink { get; set; }
-        public List<WorkoutExerciseRequest> Exercises { get; set; }
+        public List<WorkoutExerciseRequest> WorkoutExercises { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace HealthSanctuary.Web.Mappers.Exercises
         {
             return new ExerciseResponse
             {
-                Id = exercise.Id,
+                ExerciseId = exercise.ExerciseId,
                 Name = exercise.Name,
                 Description = exercise.Description,
                 VideoLink = exercise.VideoLink
@@ -20,7 +20,7 @@ namespace HealthSanctuary.Web.Mappers.Exercises
         {
             return new Exercise
             {
-                Id = exerciseId,
+                ExerciseId = exerciseId,
                 Name = exercise.Name,
                 Description = exercise.Description,
                 VideoLink = exercise.VideoLink

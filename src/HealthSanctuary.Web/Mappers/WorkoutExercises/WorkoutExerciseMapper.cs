@@ -17,20 +17,26 @@ namespace HealthSanctuary.Web.Mappers.WorkoutExercises
         {
             return new WorkoutExerciseResponse
             {
-                Id = workoutExercise.Id,
                 Reps = workoutExercise.Reps,
                 Sets = workoutExercise.Sets,
                 Exercise = _exerciseMapper.ToResponse(workoutExercise.Exercise)
             };
         }
 
-        public WorkoutExercise ToEntity(WorkoutExerciseRequest workoutExercise)
+        public WorkoutExercise ToEntity(int workoutId, int exerciseId, WorkoutExerciseRequest workoutExercise)
         {
             return new WorkoutExercise
             {
+                WorkoutId = workoutId,
+                ExerciseId = exerciseId,
                 Reps = workoutExercise.Reps,
                 Sets = workoutExercise.Sets,
             };
+        }
+
+        public WorkoutExercise ToEntity(WorkoutExerciseRequest workoutExercise)
+        {
+            return ToEntity(workoutId: default, exerciseId: default, workoutExercise);
         }
     }
 }
