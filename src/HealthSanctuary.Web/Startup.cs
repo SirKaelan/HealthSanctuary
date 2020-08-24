@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using HealthSanctuary.Core.Repositories;
 using HealthSanctuary.Core.Services.Exercises;
 using HealthSanctuary.Core.Services.Workouts;
@@ -6,6 +7,7 @@ using HealthSanctuary.Data.Repositories;
 using HealthSanctuary.Web.Mappers.Exercises;
 using HealthSanctuary.Web.Mappers.WorkoutExercises;
 using HealthSanctuary.Web.Mappers.Workouts;
+using HealthSanctuary.Web.Validators.Workouts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -32,7 +34,9 @@ namespace HealthSanctuary.Web
             AddMappers(services);
             AddServices(services);
 
-            services.AddControllersWithViews();
+            services
+                .AddControllersWithViews()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<WorkoutRequestValidator>());
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
