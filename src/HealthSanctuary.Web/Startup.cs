@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FluentValidation.AspNetCore;
 using HealthSanctuary.Core.Models;
 using HealthSanctuary.Core.Repositories;
@@ -9,13 +10,16 @@ using HealthSanctuary.Web.Mappers.Exercises;
 using HealthSanctuary.Web.Mappers.WorkoutExercises;
 using HealthSanctuary.Web.Mappers.Workouts;
 using HealthSanctuary.Web.Validators.Workouts;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace HealthSanctuary.Web
 {
@@ -37,7 +41,7 @@ namespace HealthSanctuary.Web
             AddServices(services);
 
             services
-                .AddControllersWithViews()
+                .AddControllersWithViews(o => o.Filters.Add(new AuthorizeFilter("ApiScope")))
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<WorkoutRequestValidator>());
             services.AddSpaStaticFiles(configuration =>
             {
@@ -120,11 +124,45 @@ namespace HealthSanctuary.Web
 
             services
                 .AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, HealthSanctuaryContext>();
+                .AddApiAuthorization<ApplicationUser, HealthSanctuaryContext>()
+                .AddInMemoryApiResources(new List<ApiResource>
+                {
+                    new ApiResource("hsApi")
+                })
+                .AddInMemoryClients(new List<Client>
+                {
+                    new Client
+                    {
+                        ClientId = "ro.client",
+                        AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                        AllowedScopes = new List<string> { "hsApi", "openid", "profile" },
+                        RequireClientSecret = false,
+                        AllowOfflineAccess = true,
+                        Enabled = true,
+                    }
+                });
 
             services
-                .AddAuthentication()
-                .AddIdentityServerJwt();
+                .AddAuthentication("Bearer")
+                .AddIdentityServerJwt()
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.Authority = "https://localhost:5001";
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "hsApi");
+                    policy.AuthenticationSchemes = new List<string> { "Bearer" };
+                });
+            });
         }
     }
 }

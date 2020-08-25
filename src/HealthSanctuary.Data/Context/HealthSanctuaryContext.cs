@@ -31,6 +31,8 @@ namespace HealthSanctuary.Data.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<ApplicationUser>().Property(a => a.Id).ValueGeneratedNever();
+
             WorkoutConfiguration(modelBuilder);
             WorkoutExerciseConfiguration(modelBuilder);
             ExerciseConfiguration(modelBuilder);
