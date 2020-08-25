@@ -1,12 +1,17 @@
 ﻿using HealthSanctuary.Core.Models;
+using IdentityServer4.EntityFramework.Options;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace HealthSanctuary.Data.Context
 {
-    public class HealthSanctuaryContext : DbContext
+    public class HealthSanctuaryContext : ApiAuthorizationDbContext<ApplicationUser>
     {
-        public HealthSanctuaryContext(DbContextOptions<HealthSanctuaryContext> options)
-            : base(options)
+        public HealthSanctuaryContext(
+            DbContextOptions options,
+            IOptions<OperationalStoreOptions> operationalStoreOptions)
+            : base(options, operationalStoreOptions)
         {
         }
 
@@ -15,6 +20,12 @@ namespace HealthSanctuary.Data.Context
         public DbSet<WorkoutExercise> WorkoutExercises { get; set; }
 
         public DbSet<Exercise> Exercises { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseSqlServer("Server=PESHOV2\\SQLEXPRESS;Database=HealthSanctuary;Trusted_Connection=True;", b => b.MigrationsAssembly("HealthSanctuary.Data"));
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
