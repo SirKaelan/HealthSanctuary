@@ -10,6 +10,7 @@ namespace HealthSanctuary.Core.Models
         public string Description { get; set; }
         public TimeSpan Duration { get; set; }
         public string VideoLink { get; set; }
+        public string OwnerId { get; set; }
 
         public List<WorkoutExercise> WorkoutExercises { get; set; }
     }

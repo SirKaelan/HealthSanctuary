@@ -33,7 +33,7 @@ namespace HealthSanctuary.Web.Mappers.Workouts
             };
         }
 
-        public Workout ToEntity(int workoutId, WorkoutRequest workout)
+        public Workout ToEntity(int workoutId, WorkoutRequest workout, string userId)
         {
             return new Workout
             {
@@ -42,13 +42,14 @@ namespace HealthSanctuary.Web.Mappers.Workouts
                 Description = workout.Description,
                 Duration = TimeSpan.FromMinutes(workout.Duration),
                 VideoLink = workout.VideoLink,
+                OwnerId = userId,
                 WorkoutExercises = workout.WorkoutExercises.Select(x => _workoutExerciseMapper.ToEntity(workoutId, x.ExerciseId, x)).ToList(),
             };
         }
 
-        public Workout ToEntity(WorkoutRequest workout)
+        public Workout ToEntity(WorkoutRequest workout, string userId)
         {
-            return ToEntity(workoutId: default, workout);
+            return ToEntity(workoutId: default, workout, userId);
         }
     }
 }

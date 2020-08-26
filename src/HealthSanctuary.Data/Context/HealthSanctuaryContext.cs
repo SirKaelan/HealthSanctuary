@@ -56,6 +56,10 @@ namespace HealthSanctuary.Data.Context
             modelBuilder.Entity<Workout>()
                 .Property(x => x.VideoLink)
                 .HasMaxLength(100);
+
+            modelBuilder.Entity<Workout>()
+                .Property(x => x.OwnerId)
+                .IsRequired();
         }
 
         private void WorkoutExerciseConfiguration(ModelBuilder modelBuilder)

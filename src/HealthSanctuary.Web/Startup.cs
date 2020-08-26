@@ -9,6 +9,7 @@ using HealthSanctuary.Data.Repositories;
 using HealthSanctuary.Web.Mappers.Exercises;
 using HealthSanctuary.Web.Mappers.WorkoutExercises;
 using HealthSanctuary.Web.Mappers.Workouts;
+using HealthSanctuary.Web.Middleware;
 using HealthSanctuary.Web.Validators.Workouts;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -73,6 +74,8 @@ namespace HealthSanctuary.Web
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

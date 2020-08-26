@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using HealthSanctuary.Core.Exceptions;
 using HealthSanctuary.Core.Models;
 using HealthSanctuary.Core.Repositories;
 
@@ -16,7 +17,6 @@ namespace HealthSanctuary.Core.Services.Workouts
 
         public async Task<List<Workout>> GetWorkouts()
         {
-            // Filter only current user workouts
             return await _workoutsRepository.GetWorkouts();
         }
 
@@ -35,15 +35,28 @@ namespace HealthSanctuary.Core.Services.Workouts
 
         public async Task UpdateWorkout(Workout workout)
         {
-            // Validate owner
+            var workoutEntity = await _workoutsRepository.GetWorkout(workout.WorkoutId);
+            ValidateWorkoutOwner(workoutEntity, workout.OwnerId);
+
             _workoutsRepository.UpdateWorkout(workout);
             await _workoutsRepository.SaveChanges();
         }
 
-        public async Task DeleteWorkout(int workoutId)
+        public async Task DeleteWorkout(int workoutId, string requesterUserId)
         {
+            var workoutEntity = await _workoutsRepository.GetWorkout(workoutId);
+            ValidateWorkoutOwner(workoutEntity, requesterUserId);
+
             _workoutsRepository.DeleteWorkout(workoutId);
             await _workoutsRepository.SaveChanges();
+        }
+
+        private void ValidateWorkoutOwner(Workout workout, string requesterUserId)
+        {
+            if (workout.OwnerId != requesterUserId)
+            {
+                throw new WorkoutOwnerException();
+            }
         }
     }
 }

@@ -4,14 +4,16 @@ using HealthSanctuary.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HealthSanctuary.Data.Migrations
 {
     [DbContext(typeof(HealthSanctuaryContext))]
-    partial class HealthSanctuaryContextModelSnapshot : ModelSnapshot
+    [Migration("20200826135213_AddOwnerToWorkouts")]
+    partial class AddOwnerToWorkouts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -7,8 +7,8 @@ namespace HealthSanctuary.Web.Mappers.Workouts
     {
         WorkoutResponse ToResponse(Workout workout);
 
-        Workout ToEntity(WorkoutRequest workout);
+        Workout ToEntity(WorkoutRequest workout, string userId);
 
-        Workout ToEntity(int workoutId, WorkoutRequest workout);
+        Workout ToEntity(int workoutId, WorkoutRequest workout, string userId);
     }
 }

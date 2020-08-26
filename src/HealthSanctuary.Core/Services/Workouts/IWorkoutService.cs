@@ -14,6 +14,6 @@ namespace HealthSanctuary.Core.Services.Workouts
 
         Task UpdateWorkout(Workout workout);
 
-        Task DeleteWorkout(int workoutId);
+        Task DeleteWorkout(int workoutId, string requesterUserId);
     }
 }

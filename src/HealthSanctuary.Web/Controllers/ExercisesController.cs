@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using HealthSanctuary.Core.Services.Exercises;
 using HealthSanctuary.Web.Mappers.Exercises;
 using HealthSanctuary.Web.Models.Exercises;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HealthSanctuary.Web.Controllers
@@ -21,6 +22,7 @@ namespace HealthSanctuary.Web.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetExercises()
         {
             var exercises = await _exerciseService.GetExercises();
@@ -30,6 +32,7 @@ namespace HealthSanctuary.Web.Controllers
         }
 
         [HttpGet("{exerciseId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetExercise([FromRoute] int exerciseId)
         {
             var exercise = await _exerciseService.GetExercise(exerciseId);

@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using HealthSanctuary.Core.Services.Workouts;
+using HealthSanctuary.Web.Extensions;
 using HealthSanctuary.Web.Mappers.Workouts;
 using HealthSanctuary.Web.Models.Workouts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HealthSanctuary.Web.Controllers
@@ -21,6 +23,7 @@ namespace HealthSanctuary.Web.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetWorkouts()
         {
             var workouts = await _workoutService.GetWorkouts();
@@ -30,6 +33,7 @@ namespace HealthSanctuary.Web.Controllers
         }
 
         [HttpGet("{workoutId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetWorkout([FromRoute] int workoutId)
         {
             var workout = await _workoutService.GetWorkout(workoutId);
@@ -40,7 +44,8 @@ namespace HealthSanctuary.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateWorkout([FromBody] WorkoutRequest request)
         {
-            var workout = _workoutMapper.ToEntity(request);
+            var userId = Request.GetUserId();
+            var workout = _workoutMapper.ToEntity(request, userId);
             var workoutId = await _workoutService.CreateWorkout(workout);
 
             var response = new WorkoutIdResponse(workoutId);
@@ -51,7 +56,8 @@ namespace HealthSanctuary.Web.Controllers
         [HttpPut("{workoutId}")]
         public async Task<IActionResult> UpdateWorkout([FromRoute] int workoutId, [FromBody] WorkoutRequest request)
         {
-            var workout = _workoutMapper.ToEntity(workoutId, request);
+            var userId = Request.GetUserId();
+            var workout = _workoutMapper.ToEntity(workoutId, request, userId);
 
             await _workoutService.UpdateWorkout(workout);
 
@@ -61,7 +67,8 @@ namespace HealthSanctuary.Web.Controllers
         [HttpDelete("{workoutId}")]
         public async Task<IActionResult> DeleteWorkout([FromRoute] int workoutId)
         {
-            await _workoutService.DeleteWorkout(workoutId);
+            var userId = Request.GetUserId();
+            await _workoutService.DeleteWorkout(workoutId, userId);
 
             return Ok();
         }
