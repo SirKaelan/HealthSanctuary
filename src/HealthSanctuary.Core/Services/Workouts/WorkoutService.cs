@@ -17,7 +17,7 @@ namespace HealthSanctuary.Core.Services.Workouts
 
         public async Task<List<Workout>> GetWorkouts()
         {
-            return await _workoutsRepository.GetWorkouts();
+            return await _workoutsRepository.GetReadOnlyWorkouts();
         }
 
         public async Task<Workout> GetWorkout(int workoutId)
@@ -35,7 +35,7 @@ namespace HealthSanctuary.Core.Services.Workouts
 
         public async Task UpdateWorkout(Workout workout)
         {
-            var workoutEntity = await _workoutsRepository.GetWorkout(workout.WorkoutId);
+            var workoutEntity = await _workoutsRepository.GetReadOnlyWorkout(workout.WorkoutId);
             ValidateWorkoutOwner(workoutEntity, workout.OwnerId);
 
             _workoutsRepository.UpdateWorkout(workout);
@@ -44,7 +44,7 @@ namespace HealthSanctuary.Core.Services.Workouts
 
         public async Task DeleteWorkout(int workoutId, string requesterUserId)
         {
-            var workoutEntity = await _workoutsRepository.GetWorkout(workoutId);
+            var workoutEntity = await _workoutsRepository.GetReadOnlyWorkout(workoutId);
             ValidateWorkoutOwner(workoutEntity, requesterUserId);
 
             _workoutsRepository.DeleteWorkout(workoutId);

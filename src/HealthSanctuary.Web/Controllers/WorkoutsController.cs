@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using HealthSanctuary.Core.Models;
 using HealthSanctuary.Core.Repositories;
 using HealthSanctuary.Core.Services.Workouts;
-using HealthSanctuary.Data.Context;
 using HealthSanctuary.Web.Extensions;
 using HealthSanctuary.Web.Mappers.Workouts;
 using HealthSanctuary.Web.Models.Workouts;

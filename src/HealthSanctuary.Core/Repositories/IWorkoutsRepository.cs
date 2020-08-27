@@ -9,9 +9,11 @@ namespace HealthSanctuary.Core.Repositories
     {
         IQueryable<Workout> GetQueryableWorkouts();
 
-        Task<List<Workout>> GetWorkouts();
+        Task<List<Workout>> GetReadOnlyWorkouts();
 
         Task<Workout> GetWorkout(int workoutId);
+
+        Task<Workout> GetReadOnlyWorkout(int workoutId);
 
         void AddWorkout(Workout workout);
 

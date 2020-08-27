@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HealthSanctuary.Core.Services.Exercises;
 using HealthSanctuary.Web.Mappers.Exercises;
 using HealthSanctuary.Web.Models.Exercises;
@@ -26,7 +25,7 @@ namespace HealthSanctuary.Web.Controllers
         public async Task<IActionResult> GetExercises()
         {
             var exercises = await _exerciseService.GetExercises();
-            var response = exercises.Select(x => _exerciseMapper.ToResponse(x)).ToList();
+            var response = _exerciseMapper.ToResponse(exercises);
 
             return Ok(response);
         }
@@ -46,7 +45,6 @@ namespace HealthSanctuary.Web.Controllers
         public async Task<IActionResult> CreateExercise([FromBody] ExerciseRequest request)
         {
             var exercise = _exerciseMapper.ToEntity(request);
-
             var exerciseId = await _exerciseService.CreateExercise(exercise);
 
             var response = new ExerciseIdResponse(exerciseId);
@@ -59,7 +57,6 @@ namespace HealthSanctuary.Web.Controllers
         public async Task<IActionResult> UpdateExercise([FromRoute] int exerciseId, [FromBody] ExerciseRequest request)
         {
             var exercise = _exerciseMapper.ToEntity(exerciseId, request);
-
             await _exerciseService.UpdateExercise(exercise);
 
             return Ok();

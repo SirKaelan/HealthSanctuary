@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
+using AutoMapper;
 using FluentValidation.AspNetCore;
 using HealthSanctuary.Core.Models;
 using HealthSanctuary.Core.Repositories;
@@ -7,9 +10,11 @@ using HealthSanctuary.Core.Services.Workouts;
 using HealthSanctuary.Data.Context;
 using HealthSanctuary.Data.Repositories;
 using HealthSanctuary.Web.Mappers.Exercises;
-using HealthSanctuary.Web.Mappers.WorkoutExercises;
 using HealthSanctuary.Web.Mappers.Workouts;
 using HealthSanctuary.Web.Middleware;
+using HealthSanctuary.Web.Models.Exercises;
+using HealthSanctuary.Web.Models.WorkoutExercises;
+using HealthSanctuary.Web.Models.Workouts;
 using HealthSanctuary.Web.Validators.Workouts;
 using IdentityServer4.Models;
 using Microsoft.AspNet.OData.Builder;
@@ -43,6 +48,7 @@ namespace HealthSanctuary.Web
             AddRepositories(services);
             AddMappers(services);
             AddServices(services);
+            AddAutoMapper(services);
 
             services.AddSwaggerGen();
             services.AddOData();
@@ -123,7 +129,6 @@ namespace HealthSanctuary.Web
         private void AddMappers(IServiceCollection services)
         {
             services.AddTransient<IWorkoutMapper, WorkoutMapper>();
-            services.AddTransient<IWorkoutExerciseMapper, WorkoutExerciseMapper>();
             services.AddTransient<IExerciseMapper, ExerciseMapper>();
         }
 
@@ -131,6 +136,28 @@ namespace HealthSanctuary.Web
         {
             services.AddTransient<IWorkoutService, WorkoutService>();
             services.AddTransient<IExerciseService, ExerciseService>();
+        }
+
+        private void AddAutoMapper(IServiceCollection services)
+        {
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.CreateMap<WorkoutRequest, Workout>(MemberList.None)
+                    .ForMember(x => x.WorkoutId, x => x.MapFrom((src, dest, member, context) => context.Items[nameof(dest.WorkoutId).ToLower()]))
+                    .ForMember(x => x.OwnerId, x => x.MapFrom((src, dest, member, context) => context.Items[nameof(dest.OwnerId).ToLower()]))
+                    .ForMember(x => x.Duration, x => x.MapFrom(src => TimeSpan.FromMinutes(src.Duration)))
+                    .AfterMap((src, dest) => dest.WorkoutExercises.ForEach(we => we.WorkoutId = dest.WorkoutId));
+                cfg.CreateMap<Workout, WorkoutResponse>(MemberList.None)
+                    .ForMember(x => x.Duration, x => x.MapFrom(src => src.Duration.TotalMinutes));
+
+                cfg.CreateMap<WorkoutExerciseRequest, WorkoutExercise>(MemberList.None)
+                    .ForMember(x => x.WorkoutId, x => x.MapFrom((src, dest, member, context) => context.Items[nameof(dest.WorkoutId).ToLower()]));
+                cfg.CreateMap<WorkoutExercise, WorkoutExerciseResponse>(MemberList.None);
+
+                cfg.CreateMap<ExerciseRequest, Exercise>(MemberList.None)
+                    .ForMember(x => x.ExerciseId, x => x.MapFrom((src, dest, member, context) => context.Items[nameof(dest.ExerciseId).ToLower()]));
+                cfg.CreateMap<Exercise, ExerciseResponse>(MemberList.None);
+            }, new List<Assembly>());
         }
 
         private void AddAuth(IServiceCollection services)

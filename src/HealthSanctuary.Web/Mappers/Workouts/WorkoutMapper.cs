@@ -1,50 +1,30 @@
-﻿using System;
-using System.Linq;
+﻿using AutoMapper;
 using HealthSanctuary.Core.Models;
-using HealthSanctuary.Web.Mappers.WorkoutExercises;
 using HealthSanctuary.Web.Models.Workouts;
 
 namespace HealthSanctuary.Web.Mappers.Workouts
 {
     public class WorkoutMapper : IWorkoutMapper
     {
-        private readonly IWorkoutExerciseMapper _workoutExerciseMapper;
+        private readonly IMapper _mapper;
 
-        public WorkoutMapper(IWorkoutExerciseMapper workoutExerciseMapper)
+        public WorkoutMapper(IMapper mapper)
         {
-            _workoutExerciseMapper = workoutExerciseMapper;
+            _mapper = mapper;
         }
 
         public WorkoutResponse ToResponse(Workout workout)
         {
-            if (workout == null)
-            {
-                return null;
-            }
-
-            return new WorkoutResponse
-            {
-                WorkoutId = workout.WorkoutId,
-                Title = workout.Title,
-                Description = workout.Description,
-                Duration = workout.Duration.TotalMinutes,
-                VideoLink = workout.VideoLink,
-                WorkoutExercises = workout.WorkoutExercises.Select(x => _workoutExerciseMapper.ToResponse(x)).ToList(),
-            };
+            return _mapper.Map<WorkoutResponse>(workout);
         }
 
-        public Workout ToEntity(int workoutId, WorkoutRequest workout, string userId)
+        public Workout ToEntity(int workoutId, WorkoutRequest workout, string ownerId)
         {
-            return new Workout
+            return _mapper.Map<Workout>(workout, x =>
             {
-                WorkoutId = workoutId,
-                Title = workout.Title,
-                Description = workout.Description,
-                Duration = TimeSpan.FromMinutes(workout.Duration),
-                VideoLink = workout.VideoLink,
-                OwnerId = userId,
-                WorkoutExercises = workout.WorkoutExercises.Select(x => _workoutExerciseMapper.ToEntity(workoutId, x.ExerciseId, x)).ToList(),
-            };
+                x.Items[nameof(workoutId).ToLower()] = workoutId;
+                x.Items[nameof(ownerId).ToLower()] = ownerId;
+            });
         }
 
         public Workout ToEntity(WorkoutRequest workout, string userId)

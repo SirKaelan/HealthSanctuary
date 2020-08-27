@@ -1,30 +1,32 @@
-﻿using HealthSanctuary.Core.Models;
+﻿using System.Collections.Generic;
+using AutoMapper;
+using HealthSanctuary.Core.Models;
 using HealthSanctuary.Web.Models.Exercises;
 
 namespace HealthSanctuary.Web.Mappers.Exercises
 {
     public class ExerciseMapper : IExerciseMapper
     {
+        private readonly IMapper _mapper;
+
+        public ExerciseMapper(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public ExerciseResponse ToResponse(Exercise exercise)
         {
-            return new ExerciseResponse
-            {
-                ExerciseId = exercise.ExerciseId,
-                Name = exercise.Name,
-                Description = exercise.Description,
-                VideoLink = exercise.VideoLink
-            };
+            return _mapper.Map<ExerciseResponse>(exercise);
+        }
+
+        public List<ExerciseResponse> ToResponse(List<Exercise> exercises)
+        {
+            return _mapper.Map<List<ExerciseResponse>>(exercises);
         }
 
         public Exercise ToEntity(int exerciseId, ExerciseRequest exercise)
         {
-            return new Exercise
-            {
-                ExerciseId = exerciseId,
-                Name = exercise.Name,
-                Description = exercise.Description,
-                VideoLink = exercise.VideoLink
-            };
+            return _mapper.Map<Exercise>(exercise, x => x.Items[nameof(exerciseId).ToLower()] = exerciseId);
         }
 
         public Exercise ToEntity(ExerciseRequest exercise)

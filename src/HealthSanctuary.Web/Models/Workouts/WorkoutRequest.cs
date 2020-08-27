@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using HealthSanctuary.Web.Models.WorkoutExercises;
 
 namespace HealthSanctuary.Web.Models.Workouts

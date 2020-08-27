@@ -19,13 +19,14 @@ namespace HealthSanctuary.Data.Repositories
 
         public IQueryable<Workout> GetQueryableWorkouts()
         {
-            return _context.Workouts.AsQueryable<Workout>();
+            return _context.Workouts.AsNoTracking();
         }
 
-        public async Task<List<Workout>> GetWorkouts()
+        public async Task<List<Workout>> GetReadOnlyWorkouts()
         {
             return await _context
                 .Workouts
+                .AsNoTracking()
                 .Include(x => x.WorkoutExercises)
                 .ThenInclude(x => x.Exercise)
                 .ToListAsync();
@@ -35,6 +36,16 @@ namespace HealthSanctuary.Data.Repositories
         {
             return await _context
                 .Workouts
+                .Include(x => x.WorkoutExercises)
+                .ThenInclude(x => x.Exercise)
+                .FirstOrDefaultAsync(x => x.WorkoutId == workoutId);
+        }
+
+        public async Task<Workout> GetReadOnlyWorkout(int workoutId)
+        {
+            return await _context                
+                .Workouts
+                .AsNoTracking()
                 .Include(x => x.WorkoutExercises)
                 .ThenInclude(x => x.Exercise)
                 .FirstOrDefaultAsync(x => x.WorkoutId == workoutId);
