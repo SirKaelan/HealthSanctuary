@@ -91,7 +91,7 @@ namespace HealthSanctuary.Web
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.Select().Count().Filter().OrderBy().MaxTop(100).SkipToken();
+                endpoints.Select().Expand().Count().Filter().OrderBy().MaxTop(100).SkipToken();
                 endpoints.MapODataRoute("workouts", "api", GetEdmModel());
                 endpoints.MapControllerRoute(
                     name: "default",
@@ -196,6 +196,8 @@ namespace HealthSanctuary.Web
         {
             var builder = new ODataConventionModelBuilder();
             builder.EntitySet<Workout>("Workouts");
+            builder.EntitySet<WorkoutExercise>("WorkoutExercises").EntityType.HasKey(x => new { x.WorkoutId, x.ExerciseId });
+            builder.EntitySet<Exercise>("Exercises");
             return builder.GetEdmModel();
         }
     }
