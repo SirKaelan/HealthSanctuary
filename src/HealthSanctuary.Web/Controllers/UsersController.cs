@@ -23,9 +23,11 @@ namespace HealthSanctuary.Web.Controllers
         public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
         {
             var user = new ApplicationUser(request.Username);
-            await _userManager.CreateAsync(user, request.Password);
+            var result = await _userManager.CreateAsync(user, request.Password);
 
-            return Ok();
+            return result.Succeeded 
+                ? (IActionResult)Ok()
+                : BadRequest(result.Errors);
         }
     }
 }

@@ -131,6 +131,9 @@ namespace HealthSanctuary.Web
                 .AddInMemoryApiResources(new List<ApiResource>
                 {
                     new ApiResource("hsApi")
+                    {
+                        UserClaims = new List<string> { "admin" }
+                    }
                 })
                 .AddInMemoryClients(new List<Client>
                 {
@@ -141,7 +144,6 @@ namespace HealthSanctuary.Web
                         AllowedScopes = new List<string> { "hsApi", "openid", "profile" },
                         RequireClientSecret = false,
                         AllowOfflineAccess = true,
-                        Enabled = true,
                     }
                 });
 
@@ -162,6 +164,14 @@ namespace HealthSanctuary.Web
                 options.AddPolicy("ApiScope", policy =>
                 {
                     policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "hsApi");
+                    policy.AuthenticationSchemes = new List<string> { "Bearer" };
+                });
+
+                options.AddPolicy("Admin", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("admin", "admin");
                     policy.RequireClaim("scope", "hsApi");
                     policy.AuthenticationSchemes = new List<string> { "Bearer" };
                 });

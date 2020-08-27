@@ -44,7 +44,7 @@ namespace HealthSanctuary.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateWorkout([FromBody] WorkoutRequest request)
         {
-            var userId = Request.GetUserId();
+            var userId = HttpContext.GetUserId();
             var workout = _workoutMapper.ToEntity(request, userId);
             var workoutId = await _workoutService.CreateWorkout(workout);
 
@@ -56,7 +56,7 @@ namespace HealthSanctuary.Web.Controllers
         [HttpPut("{workoutId}")]
         public async Task<IActionResult> UpdateWorkout([FromRoute] int workoutId, [FromBody] WorkoutRequest request)
         {
-            var userId = Request.GetUserId();
+            var userId = HttpContext.GetUserId();
             var workout = _workoutMapper.ToEntity(workoutId, request, userId);
 
             await _workoutService.UpdateWorkout(workout);
@@ -67,7 +67,7 @@ namespace HealthSanctuary.Web.Controllers
         [HttpDelete("{workoutId}")]
         public async Task<IActionResult> DeleteWorkout([FromRoute] int workoutId)
         {
-            var userId = Request.GetUserId();
+            var userId = HttpContext.GetUserId();
             await _workoutService.DeleteWorkout(workoutId, userId);
 
             return Ok();

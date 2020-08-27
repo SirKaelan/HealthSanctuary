@@ -41,6 +41,7 @@ namespace HealthSanctuary.Web.Controllers
             return Ok(response);
         }
 
+        [Authorize("Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateExercise([FromBody] ExerciseRequest request)
         {
@@ -53,6 +54,7 @@ namespace HealthSanctuary.Web.Controllers
             return Ok(response);
         }
 
+        [Authorize("Admin")]
         [HttpPut("{exerciseId}")]
         public async Task<IActionResult> UpdateExercise([FromRoute] int exerciseId, [FromBody] ExerciseRequest request)
         {
@@ -63,6 +65,7 @@ namespace HealthSanctuary.Web.Controllers
             return Ok();
         }
 
+        [Authorize("Admin")]
         [HttpDelete("{exerciseId}")]
         public async Task<IActionResult> DeleteExercise([FromRoute] int exerciseId)
         {
