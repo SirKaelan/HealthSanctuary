@@ -1,9 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using HealthSanctuary.Core.Services.Workouts;
+using HealthSanctuary.Data.Context;
 using HealthSanctuary.Web.Extensions;
 using HealthSanctuary.Web.Mappers.Workouts;
 using HealthSanctuary.Web.Models.Workouts;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,25 +13,25 @@ namespace HealthSanctuary.Web.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class WorkoutsController : ControllerBase
+    public class WorkoutsController : ODataController
     {
         private readonly IWorkoutService _workoutService;
         private readonly IWorkoutMapper _workoutMapper;
+        private readonly HealthSanctuaryContext _dbContext;
 
-        public WorkoutsController(IWorkoutService workoutService, IWorkoutMapper workoutMapper)
+        public WorkoutsController(IWorkoutService workoutService, IWorkoutMapper workoutMapper, HealthSanctuaryContext dbContext)
         {
             _workoutService = workoutService;
             _workoutMapper = workoutMapper;
+            _dbContext = dbContext;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetWorkouts()
+        [EnableQuery]
+        public IActionResult GetWorkouts()
         {
-            var workouts = await _workoutService.GetWorkouts();
-            var response = workouts.Select(x => _workoutMapper.ToResponse(x)).ToList();
-
-            return Ok(response);
+            return Ok(_dbContext.Workouts);
         }
 
         [HttpGet("{workoutId}")]

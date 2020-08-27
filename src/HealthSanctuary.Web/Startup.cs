@@ -12,6 +12,8 @@ using HealthSanctuary.Web.Mappers.Workouts;
 using HealthSanctuary.Web.Middleware;
 using HealthSanctuary.Web.Validators.Workouts;
 using IdentityServer4.Models;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,6 +23,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OData.Edm;
 
 namespace HealthSanctuary.Web
 {
@@ -41,6 +44,9 @@ namespace HealthSanctuary.Web
             AddMappers(services);
             AddServices(services);
 
+            services.AddSwaggerGen();
+            services.AddOData();
+
             services
                 .AddControllersWithViews(o => o.Filters.Add(new AuthorizeFilter("ApiScope")))
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<WorkoutRequestValidator>());
@@ -48,7 +54,6 @@ namespace HealthSanctuary.Web
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-            services.AddSwaggerGen();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -86,6 +91,8 @@ namespace HealthSanctuary.Web
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.Select().Count().Filter().OrderBy().MaxTop(100).SkipToken();
+                endpoints.MapODataRoute("workouts", "api", GetEdmModel());
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
@@ -183,6 +190,13 @@ namespace HealthSanctuary.Web
                     policy.AuthenticationSchemes = new List<string> { "Bearer" };
                 });
             });
+        }
+
+        private IEdmModel GetEdmModel()
+        {
+            var builder = new ODataConventionModelBuilder();
+            builder.EntitySet<Workout>("Workouts");
+            return builder.GetEdmModel();
         }
     }
 }
