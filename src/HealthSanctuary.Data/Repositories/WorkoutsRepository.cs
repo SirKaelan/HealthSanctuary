@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using HealthSanctuary.Core.Models;
 using HealthSanctuary.Core.Repositories;
@@ -14,6 +15,11 @@ namespace HealthSanctuary.Data.Repositories
         public WorkoutsRepository(HealthSanctuaryContext context)
         {
             _context = context;
+        }
+
+        public IQueryable<Workout> GetQueryableWorkouts()
+        {
+            return _context.Workouts.AsQueryable<Workout>();
         }
 
         public async Task<List<Workout>> GetWorkouts()

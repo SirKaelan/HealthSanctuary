@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using HealthSanctuary.Core.Models;
+using HealthSanctuary.Core.Repositories;
 using HealthSanctuary.Core.Services.Workouts;
 using HealthSanctuary.Data.Context;
 using HealthSanctuary.Web.Extensions;
@@ -17,21 +19,21 @@ namespace HealthSanctuary.Web.Controllers
     {
         private readonly IWorkoutService _workoutService;
         private readonly IWorkoutMapper _workoutMapper;
-        private readonly HealthSanctuaryContext _dbContext;
+        private readonly IWorkoutsRepository _workoutsRepository;
 
-        public WorkoutsController(IWorkoutService workoutService, IWorkoutMapper workoutMapper, HealthSanctuaryContext dbContext)
+        public WorkoutsController(IWorkoutService workoutService, IWorkoutMapper workoutMapper, IWorkoutsRepository workoutsRepository)
         {
             _workoutService = workoutService;
             _workoutMapper = workoutMapper;
-            _dbContext = dbContext;
+            _workoutsRepository = workoutsRepository;
         }
 
         [HttpGet]
         [AllowAnonymous]
         [EnableQuery]
-        public IActionResult GetWorkouts()
+        public IQueryable<Workout> GetWorkouts()
         {
-            return Ok(_dbContext.Workouts);
+            return _workoutsRepository.GetQueryableWorkouts();
         }
 
         [HttpGet("{workoutId}")]
