@@ -48,6 +48,7 @@ namespace HealthSanctuary.Web
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            services.AddSwaggerGen();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -68,6 +69,12 @@ namespace HealthSanctuary.Web
             {
                 app.UseSpaStaticFiles();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "HealthSancuary V1");
+            });
 
             app.UseRouting();
 
