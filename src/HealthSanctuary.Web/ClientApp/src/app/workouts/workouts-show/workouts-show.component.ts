@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
-import { WorkoutService } from '../workout.service';
 import { Workout } from '../workout-models/Workout';
 
 @Component({
@@ -9,15 +8,11 @@ import { Workout } from '../workout-models/Workout';
   styleUrls: ['./workouts-show.component.css']
 })
 export class WorkoutsShowComponent implements OnInit {
-  private workouts: Workout[] = [];
+  @Input() private workouts: Workout[] = [];
 
-  constructor(private workoutService: WorkoutService) { }
+  constructor() { }
 
   ngOnInit() {
-    this.workoutService.getWorkouts().subscribe(workouts => {
-      console.log(workouts);
-      this.workouts = workouts;
-    });
   }
 
 }

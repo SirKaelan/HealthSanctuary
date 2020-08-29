@@ -12,7 +12,6 @@ export class WorkoutCardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.workout);
   }
 
 }

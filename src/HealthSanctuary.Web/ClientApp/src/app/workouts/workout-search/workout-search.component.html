@@ -1,0 +1,7 @@
+<mat-form-field class="workout-search">
+  <mat-label>Search workouts</mat-label>
+  <input matInput type="text" [(ngModel)]="term" (keyup.enter)="onSearch()">
+  <button mat-button *ngIf="term" matSuffix mat-icon-button aria-label="Clear" (click)="term=''">
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>

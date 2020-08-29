@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import buildQuery from 'odata-query';
 
 import { Workout } from './workout-models/Workout';
+import { Search } from './workout-models/Search';
 
 interface ODataResponse {
   '@odata.context': string;
@@ -20,9 +21,8 @@ export class WorkoutService {
 
   constructor(private http: HttpClient) { }
 
-  getWorkouts(): Observable<Workout[]> {
-    const query = buildQuery({ });
-    console.log('Query', query);
+  getWorkouts(search: Search): Observable<Workout[]> {
+    const query = this.buildWorkoutsQuery(search);
     return this.http.get<ODataResponse>(`${this.url}${query}`)
       .pipe(
         map(res => res.value)
@@ -31,5 +31,16 @@ export class WorkoutService {
 
   getWorkout(workoutId: number): Observable<Workout> {
     return this.http.get<Workout>(`${this.url}/${workoutId}`);
+  }
+
+  private buildWorkoutsQuery(search: Search) {
+    return buildQuery({
+      count: true,
+      filter: {
+        Title: {
+          contains: search.term
+        }
+      }
+    });
   }
 }

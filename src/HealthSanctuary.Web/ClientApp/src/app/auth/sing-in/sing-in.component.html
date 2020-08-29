@@ -1,0 +1,26 @@
+<form formGroupName="signInForm" class="sign-in-form" (ngSumbit)="onSubmit()">
+  <p>
+    <mat-form-field appearance="standard">
+      <mat-label>Username</mat-label>
+      <input 
+        matInput 
+        placeholder="Enter your username" 
+        formControlName="username" 
+        name="username" 
+        autocomplete="new-username">
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field appearance="standard">
+      <mat-label>Password</mat-label>
+      <input 
+        matInput        
+        placeholder="Enter your password" 
+        formControlName="password" 
+        name="password" 
+        type="password" 
+        autocomplete="new-password">
+    </mat-form-field>
+  </p>
+  <button mat-raised-button color="primary" type="submit">Sign In</button>
+</form>

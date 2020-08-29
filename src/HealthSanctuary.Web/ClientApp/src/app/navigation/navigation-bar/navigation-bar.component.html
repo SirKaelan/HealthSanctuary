@@ -1,0 +1,6 @@
+<nav mat-tab-nav-bar color="primary" backgroundColor="primary">
+  <a mat-tab-link routerLink="/workouts" routerLinkActive="active" #workouts [active]="workouts.classList.contains('active')">Workouts</a>
+  <a mat-tab-link routerLink="/sign-in" routerLinkActive="active" #signIn [active]="signIn.classList.contains('active')">Sign In</a>
+  <a mat-tab-link routerLink="/sign-up" routerLinkActive="active" #signUp [active]="signUp.classList.contains('active')">Sign Up</a>
+  <a mat-tab-link routerLink="/sign-out" routerLinkActive="active" #signOut [active]="signOut.classList.contains('active')">Sign Out</a>
+</nav>
