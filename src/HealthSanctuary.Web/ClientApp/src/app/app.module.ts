@@ -1,8 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { WorkoutsModule } from './workouts/workouts.module';
@@ -16,7 +17,8 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
-    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
     AuthModule,
     NavigationModule,
     WorkoutsModule,

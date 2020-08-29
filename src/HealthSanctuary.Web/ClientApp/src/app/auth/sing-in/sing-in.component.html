@@ -1,8 +1,10 @@
-<form formGroupName="signInForm" class="sign-in-form" (ngSumbit)="onSubmit()">
+<form [formGroup]="signInForm" (ngSubmit)="onSubmit()" class="sign-in-form">
+  <h2 class="mat-h2">Sign In</h2>
   <p>
-    <mat-form-field appearance="standard">
+    <mat-form-field appearance="standard" class="form-field">
       <mat-label>Username</mat-label>
       <input 
+        class="asd"
         matInput 
         placeholder="Enter your username" 
         formControlName="username" 
@@ -11,7 +13,7 @@
     </mat-form-field>
   </p>
   <p>
-    <mat-form-field appearance="standard">
+    <mat-form-field appearance="standard" class="form-field">
       <mat-label>Password</mat-label>
       <input 
         matInput        

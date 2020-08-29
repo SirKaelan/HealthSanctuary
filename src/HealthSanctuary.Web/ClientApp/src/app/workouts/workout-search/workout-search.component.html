@@ -1,4 +1,4 @@
-<mat-form-field class="workout-search">
+<mat-form-field class="workout-search" appearance="fill">
   <mat-label>Search workouts</mat-label>
   <input matInput type="text" [(ngModel)]="term" (keyup.enter)="onSearch()">
   <button mat-button *ngIf="term" matSuffix mat-icon-button aria-label="Clear" (click)="term=''">

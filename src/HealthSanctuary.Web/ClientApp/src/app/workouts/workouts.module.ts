@@ -5,7 +5,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { WorkoutsRoutingModule } from './workouts-routing.module';
 import { WorkoutCardComponent } from './workout-card/workout-card.component';
@@ -23,7 +22,6 @@ import { WorkoutsLayoutComponent } from './workouts-layout/workouts-layout.compo
     MatButtonModule,
     MatInputModule,
     MatIconModule,
-    NoopAnimationsModule,
     WorkoutsRoutingModule,
   ]
 })

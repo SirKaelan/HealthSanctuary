@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-sing-in',
@@ -8,17 +11,22 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class SingInComponent implements OnInit {
   signInForm = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl(''),
+    username: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
   });
 
-  constructor() { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
   }
 
   onSubmit() {
-    console.log(this.signInForm.value);
+    const { username, password } = this.signInForm.value;
+    this.authService.login(username, password).subscribe({
+      next: (token) => {
+        console.log(token);
+        this.router.navigateByUrl('/');
+      }
+    });
   }
-
 }
