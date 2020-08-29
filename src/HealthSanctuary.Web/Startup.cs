@@ -74,6 +74,13 @@ namespace HealthSanctuary.Web
                 app.UseHsts();
             }
 
+            app.UseCors(p =>
+            {
+                p.AllowAnyOrigin();
+                p.AllowAnyHeader();
+                p.AllowAnyMethod();
+            });
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             if (!env.IsDevelopment())
@@ -104,15 +111,15 @@ namespace HealthSanctuary.Web
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
-            });
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseAngularCliServer(npmScript: "start");
+            //    }
+            //});
         }
 
         private void AddDbContext(IServiceCollection services)
@@ -222,6 +229,7 @@ namespace HealthSanctuary.Web
         private IEdmModel GetEdmModel()
         {
             var builder = new ODataConventionModelBuilder();
+            builder.EnableLowerCamelCase();
             builder.EntitySet<Workout>("Workouts");
             builder.EntitySet<WorkoutExercise>("WorkoutExercises").EntityType.HasKey(x => new { x.WorkoutId, x.ExerciseId });
             builder.EntitySet<Exercise>("Exercises");
