@@ -21,6 +21,10 @@ export class SingInComponent implements OnInit {
   }
 
   onSubmit() {
+    if (!this.signInForm.valid) {
+      return;
+    }
+
     const { username, password } = this.signInForm.value;
     this.authService.login(username, password).subscribe({
       next: (token) => {
@@ -28,5 +32,10 @@ export class SingInComponent implements OnInit {
         this.router.navigateByUrl('/');
       }
     });
+  }
+
+  showErrors(formControl: FormControl): boolean {
+    const { touched, dirty } = formControl;
+    return touched && dirty;
   }
 }

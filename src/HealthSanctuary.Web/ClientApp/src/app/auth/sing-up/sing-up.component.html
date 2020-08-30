@@ -1,1 +1,52 @@
-<p>sing-up works!</p>
+<form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="sign-up-form">
+  <h2 class="mat-h2">Sign Up</h2>
+  <p>
+    <mat-form-field appearance="standard" class="form-field">
+      <mat-label>Username</mat-label>
+      <input 
+        class="asd"
+        matInput 
+        placeholder="Enter your username" 
+        formControlName="username" 
+        name="username" 
+        autocomplete="new-username">
+    </mat-form-field>
+    <mat-error *ngIf="showErrors(signUpForm.controls.username) && signUpForm.controls.username.errors?.required">
+      Please enter a username
+    </mat-error>
+  </p>
+  <p>
+    <mat-form-field appearance="standard" class="form-field">
+      <mat-label>Password</mat-label>
+      <input 
+        matInput        
+        placeholder="Enter your password" 
+        formControlName="password" 
+        name="password" 
+        type="password" 
+        autocomplete="new-password">
+    </mat-form-field>
+    <mat-error *ngIf="showErrors(signUpForm.controls.password) && signUpForm.controls.password.errors?.required">
+      Please enter a password
+    </mat-error>
+  </p>
+  <p>
+    <mat-form-field appearance="standard" class="form-field">
+      <mat-label>Confirm Password</mat-label>
+      <input 
+        matInput        
+        placeholder="Confirm your password" 
+        formControlName="confirmPassword" 
+        name="confirmPassword" 
+        type="password" 
+        autocomplete="new-confirmPassword">
+    </mat-form-field>
+    <mat-error *ngIf="showErrors(signUpForm.controls.confirmPassword) && signUpForm.controls.confirmPassword.errors?.required">
+      Please confirm your password
+    </mat-error>
+  </p>
+  <mat-error *ngIf="signUpForm.errors?.passwordsDontMatch && signUpForm.controls.confirmPassword.value">
+    Your passwords do not match
+  </mat-error>
+  <button mat-raised-button color="primary" type="submit" [disabled]="!signUpForm.valid">Sign Up</button>
+</form>

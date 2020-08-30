@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, tap, switchMap } from 'rxjs/operators';
+
+import { environment } from '../../environments/environment';
 
 interface AccessToken {
   'access_token': string;
   'refresh_token': string;
   'expires_in': number;
-  type: string;
+  'token_type': string;
+  'scope': string;
 }
 
 @Injectable({
@@ -16,7 +18,7 @@ interface AccessToken {
 })
 export class AuthService {
   private tokenEndpoint = `${environment.healthSanctuaryApiRoot}/connect/token`;
-  private registerEndpoint = `${environment.healthSanctuaryApiRoot}/api/users/register`
+  private registerEndpoint = `${environment.healthSanctuaryApiRoot}/api/users/register`;
 
   accessToken$ = new BehaviorSubject<string>('');
 

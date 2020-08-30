@@ -11,6 +11,9 @@
         name="username" 
         autocomplete="new-username">
     </mat-form-field>
+    <mat-error *ngIf="showErrors(signInForm.controls.username) && signInForm.controls.username.errors?.required">
+      Please enter a username
+    </mat-error>
   </p>
   <p>
     <mat-form-field appearance="standard" class="form-field">
@@ -23,6 +26,9 @@
         type="password" 
         autocomplete="new-password">
     </mat-form-field>
+    <mat-error *ngIf="showErrors(signInForm.controls.password) && signInForm.controls.password.errors?.required">
+      Please enter a password
+    </mat-error>
   </p>
-  <button mat-raised-button color="primary" type="submit">Sign In</button>
+  <button mat-raised-button color="primary" type="submit" [disabled]="!signInForm.valid">Sign In</button>
 </form>
