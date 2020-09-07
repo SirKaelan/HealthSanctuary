@@ -1,0 +1,59 @@
+<form [formGroup]="workout" (ngSubmit)="onSubmit()" class="workout-create-form">
+  <h2 class="mat-h2">Create your workout</h2>
+  <div class="form-group"> 
+    <mat-form-field class="workout-title workout-input">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" placeholder="Choose a title">
+    </mat-form-field>
+
+    <mat-form-field class="workout-duration workout-input">
+      <mat-label>Duration (min)</mat-label>
+      <input matInput formControlName="duration" type="number">
+    </mat-form-field>
+  </div>
+
+  <mat-form-field class="workout-create-full-width">
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description" class="workout-description" rows="5" placeholder="Describe your workout with a few words"></textarea>
+  </mat-form-field>
+
+  <mat-form-field class="workout-video-link workout-input workout-create-full-width">
+    <mat-label>YouTube Video Link</mat-label>
+    <input matInput formControlName="videoLink" placeholder="Video of your workout">
+  </mat-form-field>
+
+  <iframe class="workout-video" width="560" height="315" frameborder='0' scrolling='no' [src]="workout.get('videoLink').value | embed" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+  <ng-container formArrayName="exercises">
+    <div *ngFor="let exercise of workout.get('exercises').controls; let i = index;" [formGroupName]="i" class="form-group"> 
+      <mat-form-field class="workout-exercise workout-input">
+        <mat-label>Exercise</mat-label>
+        <input matInput formControlName="name" placeholder="Select an exercise">
+      </mat-form-field>
+  
+      <mat-form-field class="workout-exercise-sets workout-input">
+        <mat-label>Sets</mat-label>
+        <input matInput formControlName="sets" type="number">
+      </mat-form-field>
+  
+      <mat-form-field class="workout-exercise-reps workout-input">
+        <mat-label>Reps</mat-label>
+        <input matInput formControlName="reps" type="number">
+      </mat-form-field>    
+
+      <div class="remove-exercise" *ngIf="workout.get('exercises').controls.length !== 1" (click)="onExerciseDelete(i)">
+        <button mat-mini-fab color="primary">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+  </ng-container>
+  <div (click)="onAddExercise()" class="add-exercise">
+    <button mat-fab color="primary">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <button mat-raised-button color="primary" type="submit">Submit</button>
+</form>

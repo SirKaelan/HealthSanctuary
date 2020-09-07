@@ -2,6 +2,7 @@
   <div class="app-nav">
     <div>
       <a mat-tab-link routerLink="/workouts" routerLinkActive="active" #workouts [active]="workouts.classList.contains('active')">Workouts</a>
+      <a mat-tab-link routerLink="/workout-create" routerLinkActive="active" #workoutCreate [active]="workoutCreate.classList.contains('active')">Create</a>
     </div>
     <div>
       <a mat-tab-link *ngIf="!isSignedIn" routerLink="/sign-in" routerLinkActive="active" #signIn [active]="signIn.classList.contains('active')">Sign In</a>
