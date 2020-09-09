@@ -1,7 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using HealthSanctuary.Core.Models;
+using HealthSanctuary.Core.Repositories;
 using HealthSanctuary.Core.Services.Exercises;
 using HealthSanctuary.Web.Mappers.Exercises;
 using HealthSanctuary.Web.Models.Exercises;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,22 +16,22 @@ namespace HealthSanctuary.Web.Controllers
     public class ExercisesController : ControllerBase
     {
         private readonly IExerciseMapper _exerciseMapper;
+        private readonly IExercisesRepository _exercisesRepository;
         private readonly IExerciseService _exerciseService;
 
-        public ExercisesController(IExerciseService exerciseService, IExerciseMapper exerciseMapper)
+        public ExercisesController(IExerciseService exerciseService, IExerciseMapper exerciseMapper, IExercisesRepository exercisesRepository)
         {
             _exerciseService = exerciseService;
             _exerciseMapper = exerciseMapper;
+            _exercisesRepository = exercisesRepository;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetExercises()
+        [EnableQuery]
+        public IQueryable<Exercise> GetExercises()
         {
-            var exercises = await _exerciseService.GetExercises();
-            var response = _exerciseMapper.ToResponse(exercises);
-
-            return Ok(response);
+            return _exercisesRepository.GetQueryableExercises();
         }
 
         [HttpGet("{exerciseId}")]

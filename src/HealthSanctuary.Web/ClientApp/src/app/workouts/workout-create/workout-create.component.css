@@ -67,3 +67,12 @@
 button {
   margin-bottom: 100px;
 }
+
+.is-loading ::ng-deep .mat-option-text {
+  display: flex;
+  justify-content: center;
+}
+
+button:focus {
+  outline:0;
+}

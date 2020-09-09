@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatAutocompleteModule, MatProgressSpinnerModule } from '@angular/material';
 
 import { WorkoutsRoutingModule } from './workouts-routing.module';
 import { WorkoutCardComponent } from './workout-card/workout-card.component';
@@ -33,6 +34,8 @@ import { EmbedPipe } from './embed.pipe';
     MatButtonModule,
     MatInputModule,
     MatIconModule,
+    MatAutocompleteModule,
+    MatProgressSpinnerModule,
     WorkoutsRoutingModule,
   ]
 })

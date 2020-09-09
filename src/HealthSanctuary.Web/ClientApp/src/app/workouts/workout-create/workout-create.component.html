@@ -28,7 +28,7 @@
     <div *ngFor="let exercise of workout.get('exercises').controls; let i = index;" [formGroupName]="i" class="form-group"> 
       <mat-form-field class="workout-exercise workout-input">
         <mat-label>Exercise</mat-label>
-        <input matInput formControlName="name" placeholder="Select an exercise">
+        <input matInput formControlName="name" placeholder="Select an exercise" [matAutocomplete]="auto">
       </mat-form-field>
   
       <mat-form-field class="workout-exercise-sets workout-input">
@@ -47,13 +47,21 @@
         </button>
       </div>
     </div>
-
   </ng-container>
+
   <div (click)="onAddExercise()" class="add-exercise">
-    <button mat-fab color="primary">
+    <button mat-fab color="primary" type="button">
       <mat-icon>add</mat-icon>
     </button>
   </div>
 
   <button mat-raised-button color="primary" type="submit">Submit</button>
+
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayExercise">
+    <ng-container>
+      <mat-option *ngFor="let exercise of (exercises | async)" [value]="exercise">
+        <span>{{ exercise.name }}</span>
+      </mat-option>
+    </ng-container>
+  </mat-autocomplete>
 </form>
