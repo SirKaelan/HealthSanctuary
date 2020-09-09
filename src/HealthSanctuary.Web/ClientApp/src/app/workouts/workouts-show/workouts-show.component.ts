@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output } from '@angular/core';
+import { Subject } from 'rxjs';
 
 import { Workout } from '../workout-models/Workout';
 
@@ -9,10 +10,16 @@ import { Workout } from '../workout-models/Workout';
 })
 export class WorkoutsShowComponent implements OnInit {
   @Input() private workouts: Workout[] = [];
+  @Input() private currentUserId = '';
+  @Output() refresh = new Subject();
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onRefresh() {
+    this.refresh.next();
   }
 
 }

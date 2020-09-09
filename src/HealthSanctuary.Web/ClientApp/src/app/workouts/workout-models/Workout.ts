@@ -6,5 +6,6 @@ export interface Workout {
   description: string;
   duration: number;
   videoLink: string;
+  ownerId: string;
   workoutExercises: WorkoutExercise[];
 }

@@ -7,3 +7,7 @@
 .workout-header-image {
   background-size: cover;
 }
+
+button:focus {
+  outline: none;
+}

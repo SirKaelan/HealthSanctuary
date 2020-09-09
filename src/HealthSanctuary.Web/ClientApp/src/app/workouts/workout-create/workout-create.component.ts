@@ -85,6 +85,7 @@ export class WorkoutCreateComponent implements OnInit {
     const formValue = this.workout.value;
     const workout: Workout = {
       workoutId: 0,
+      ownerId: '',
       title: formValue.title,
       description: formValue.description,
       duration: formValue.duration,

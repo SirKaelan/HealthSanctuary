@@ -46,6 +46,17 @@ export class WorkoutService {
     return this.http.get<Workout>(`${this.url}/${workoutId}`);
   }
 
+  deleteWorkout(workoutId: number): Observable<void> {
+    return this.authService.accessToken$.pipe(
+      switchMap(token => {
+        const headers = {
+          Authorization: `Bearer ${token}`
+        };
+        return this.http.delete<void>(`${this.url}/${workoutId}`, { headers });
+      })
+    );
+  }
+
   private buildWorkoutsQuery(search: Search) {
     return buildQuery({
       count: true,

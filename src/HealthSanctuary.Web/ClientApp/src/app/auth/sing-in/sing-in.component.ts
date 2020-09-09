@@ -28,7 +28,6 @@ export class SingInComponent implements OnInit {
     const { username, password } = this.signInForm.value;
     this.authService.login(username, password).subscribe({
       next: (token) => {
-        console.log(token);
         this.router.navigateByUrl('/');
       }
     });

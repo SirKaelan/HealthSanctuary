@@ -1,2 +1,2 @@
 <app-workout-search (search)="onSearch($event)"></app-workout-search>
-<app-workouts-show [workouts]="workouts"></app-workouts-show>
+<app-workouts-show [workouts]="workouts" [currentUserId]="currentUserId" (refresh)="onRefresh()"></app-workouts-show>

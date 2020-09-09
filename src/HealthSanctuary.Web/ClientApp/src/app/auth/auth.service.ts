@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, tap, switchMap } from 'rxjs/operators';
+import jwt_decode from 'jwt-decode';
 
 import { environment } from '../../environments/environment';
 
@@ -21,6 +22,9 @@ export class AuthService {
   private registerEndpoint = `${environment.healthSanctuaryApiRoot}/api/users/register`;
 
   accessToken$ = new BehaviorSubject<string>('');
+  userId$ = this.accessToken$.pipe<string>(
+    map(token => token ? jwt_decode(token).sub : '')
+  );
 
   constructor(private http: HttpClient) { }
 
@@ -43,7 +47,7 @@ export class AuthService {
     return this.http.post<AccessToken>(this.tokenEndpoint, params, { headers } )
       .pipe(
         map(res => res.access_token),
-        tap(token => this.accessToken$.next(token))
+        tap(token => this.accessToken$.next(token)),
       );
   }
 

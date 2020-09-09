@@ -1,2 +1,7 @@
-<app-workout-card *ngFor="let workout of workouts" [workout]="workout" class="workout-card" ></app-workout-card>
+<app-workout-card 
+  *ngFor="let workout of workouts" 
+  [workout]="workout" 
+  [currentUserId]="currentUserId" 
+  (refresh)="onRefresh()"
+  class="workout-card" ></app-workout-card>
 
