@@ -1,0 +1,78 @@
+.workout-create-form {
+  min-width: 150px;
+  max-width: 560px;
+  width: 100%;
+  margin: 50px auto 0 auto;
+}
+
+.workout-create-full-width, button {
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.add-exercise {
+  display: flex;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 20px;
+}
+
+.add-exercise button {
+  margin-bottom: 0;
+}
+
+.remove-exercise {
+  display: flex;
+  justify-content: center;
+  width: 50px;
+}
+
+.remove-exercise button {
+  margin-bottom: 0;
+}
+
+.workout-input:not(:last-child) {
+  margin-right: 10px;
+}
+
+.workout-title {
+  width: 75%;
+}
+
+.workout-duration {
+  width: 25%;
+}
+
+.workout-video {
+  margin-bottom: 20px;
+}
+
+.workout-exercise {
+  width: 60%;
+}
+
+.workout-exercise-sets {
+  width: 20%;
+}
+
+.workout-exercise-reps {
+  width: 20%;
+}
+
+button {
+  margin-bottom: 100px;
+}
+
+.is-loading ::ng-deep .mat-option-text {
+  display: flex;
+  justify-content: center;
+}
+
+button:focus {
+  outline:0;
+}

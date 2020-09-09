@@ -56,6 +56,11 @@ namespace HealthSanctuary.Data.Repositories
             _context.Workouts.Add(workout);
         }
 
+        public void AddWorkoutExercises(IEnumerable<WorkoutExercise> workoutExercises)
+        {
+            _context.WorkoutExercises.AddRange(workoutExercises);
+        }
+
         public void UpdateWorkout(Workout workout)
         {
             _context.Workouts.Update(workout);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using HealthSanctuary.Core.Exceptions;
 using HealthSanctuary.Core.Models;
@@ -38,6 +39,13 @@ namespace HealthSanctuary.Core.Services.Workouts
             var workoutEntity = await _workoutsRepository.GetReadOnlyWorkout(workout.WorkoutId);
             ValidateWorkoutOwner(workoutEntity, workout.OwnerId);
 
+            var oldWorkoutExerciseIds = workoutEntity.WorkoutExercises.Select(x => x.ExerciseId).ToList();
+            var newWorkoutExercises = workout
+                .WorkoutExercises
+                .Where(x => !oldWorkoutExerciseIds.Contains(x.ExerciseId))
+                .ToList();
+
+            _workoutsRepository.AddWorkoutExercises(newWorkoutExercises);
             _workoutsRepository.UpdateWorkout(workout);
             await _workoutsRepository.SaveChanges();
         }

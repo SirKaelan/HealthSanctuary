@@ -17,6 +17,8 @@ namespace HealthSanctuary.Core.Repositories
 
         void AddWorkout(Workout workout);
 
+        void AddWorkoutExercises(IEnumerable<WorkoutExercise> workoutExercises);
+
         void UpdateWorkout(Workout workout);
 
         void DeleteWorkout(int workoutId);

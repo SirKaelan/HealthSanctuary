@@ -15,6 +15,7 @@ import { WorkoutSearchComponent } from './workout-search/workout-search.componen
 import { WorkoutsLayoutComponent } from './workouts-layout/workouts-layout.component';
 import { WorkoutCreateComponent } from './workout-create/workout-create.component';
 import { EmbedPipe } from './embed.pipe';
+import { WorkoutEditComponent } from './workout-edit/workout-edit.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { EmbedPipe } from './embed.pipe';
     WorkoutSearchComponent,
     WorkoutsLayoutComponent,
     WorkoutCreateComponent,
-    EmbedPipe
+    EmbedPipe,
+    WorkoutEditComponent
   ],
   imports: [
     CommonModule,

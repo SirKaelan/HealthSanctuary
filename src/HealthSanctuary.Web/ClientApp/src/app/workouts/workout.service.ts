@@ -46,6 +46,17 @@ export class WorkoutService {
     return this.http.get<Workout>(`${this.url}/${workoutId}`);
   }
 
+  updateWorkout(workout: Workout): Observable<void> {
+    return this.authService.accessToken$.pipe(
+      switchMap(token => {
+        const headers = {
+          Authorization: `Bearer ${token}`
+        };
+        return this.http.put<void>(`${this.url}/${workout.workoutId}`, workout, { headers });
+      })
+    );
+  }
+
   deleteWorkout(workoutId: number): Observable<void> {
     return this.authService.accessToken$.pipe(
       switchMap(token => {
