@@ -81,7 +81,28 @@ export class WorkoutCreateComponent implements OnInit {
     }
   }
 
+  filterAvailableExercises(exercises: Exercise[]): Exercise[] {
+    if (!exercises) {
+      return exercises;
+    }
+
+    const usedExercises = (this.workout.get('exercises') as FormArray).value.map(x => {
+      if (typeof x.name === 'object') {
+        return x.name.name;
+      } else {
+        return x.name;
+      }
+    });
+
+    return exercises.filter(exercise => !usedExercises.some(name => name === exercise.name));
+  }
+
   onSubmit() {
+    console.log(this.workout.valid);
+    if (!this.workout.valid) {
+      return;
+    }
+
     const formValue = this.workout.value;
     const workout: Workout = {
       workoutId: 0,

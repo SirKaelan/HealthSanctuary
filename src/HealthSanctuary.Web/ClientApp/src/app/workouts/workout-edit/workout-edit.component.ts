@@ -57,7 +57,7 @@ export class WorkoutEditComponent implements OnInit {
                 return '';
               }
             }),
-            switchMap(name => this.exerciseService.getExercises(name, 10))
+            switchMap(name => this.exerciseService.getExercises(name, 10)),
           ))
       )
     );
@@ -93,7 +93,27 @@ export class WorkoutEditComponent implements OnInit {
     }
   }
 
+  filterAvailableExercises(exercises: Exercise[]): Exercise[] {
+    if (!exercises) {
+      return exercises;
+    }
+
+    const usedExercises = (this.workout.get('exercises') as FormArray).value.map(x => {
+      if (typeof x.name === 'object') {
+        return x.name.name;
+      } else {
+        return x.name;
+      }
+    });
+
+    return exercises.filter(exercise => !usedExercises.some(name => name === exercise.name));
+  }
+
   onSubmit() {
+    if (!this.workout.valid) {
+      return;
+    }
+
     const formValue = this.workout.value;
     console.log(formValue);
     const workout: Workout = {

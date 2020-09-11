@@ -59,7 +59,7 @@
 
   <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayExercise">
     <ng-container>
-      <mat-option *ngFor="let exercise of (exercises | async)" [value]="exercise">
+      <mat-option *ngFor="let exercise of filterAvailableExercises((exercises | async))" [value]="exercise">
         <span>{{ exercise.name }}</span>
       </mat-option>
     </ng-container>

@@ -31,4 +31,7 @@
     </mat-error>
   </p>
   <button mat-raised-button color="primary" type="submit" [disabled]="!signInForm.valid">Sign In</button>
+  <mat-error *ngIf="isAuthError">
+    Invalid username or password
+  </mat-error>
 </form>

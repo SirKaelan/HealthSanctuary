@@ -10,6 +10,7 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./sing-in.component.css']
 })
 export class SingInComponent implements OnInit {
+  isAuthError: boolean;
   signInForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
@@ -29,6 +30,11 @@ export class SingInComponent implements OnInit {
     this.authService.login(username, password).subscribe({
       next: (token) => {
         this.router.navigateByUrl('/');
+      },
+      error: (err) => {
+        if (err.error) {
+          this.isAuthError = true;
+        }
       }
     });
   }

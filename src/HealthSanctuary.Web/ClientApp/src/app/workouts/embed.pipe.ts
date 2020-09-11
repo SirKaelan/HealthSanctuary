@@ -9,7 +9,7 @@ export class EmbedPipe implements PipeTransform {
 
   transform(value: string, ...args: any[]): any {
     if (!value || !value.startsWith('https://www.youtube.com/')) {
-      return this.sanitize('https://capeoffice.co.za/site/wp-content/uploads/2017/06/video-placeholder.png');
+      return this.sanitize('assets/video-placeholder.png');
     }
 
     const videoId = value.split('/').slice(-1).pop().slice(8);

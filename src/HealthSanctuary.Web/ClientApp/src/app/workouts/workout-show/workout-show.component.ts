@@ -34,8 +34,6 @@ export class WorkoutShowComponent implements OnInit, OnDestroy {
   }
 
   isOwner() {
-    console.log('userId', this.currentUserId);
-    console.log('ownerId', this.workout.ownerId);
     return this.currentUserId && this.workout.ownerId === this.currentUserId;
   }
 
