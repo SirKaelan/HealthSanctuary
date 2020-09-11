@@ -5,10 +5,12 @@ using AutoMapper;
 using FluentValidation.AspNetCore;
 using HealthSanctuary.Core.Models;
 using HealthSanctuary.Core.Repositories;
+using HealthSanctuary.Core.Services;
 using HealthSanctuary.Core.Services.Exercises;
 using HealthSanctuary.Core.Services.Workouts;
 using HealthSanctuary.Data.Context;
 using HealthSanctuary.Data.Repositories;
+using HealthSanctuary.Data.Seeders;
 using HealthSanctuary.Web.Mappers.Exercises;
 using HealthSanctuary.Web.Mappers.Workouts;
 using HealthSanctuary.Web.Middleware;
@@ -49,6 +51,7 @@ namespace HealthSanctuary.Web
             AddMappers(services);
             AddServices(services);
             AddAutoMapper(services);
+            AddStartupTasks(services);
 
             services.AddSwaggerGen();
             services.AddOData();
@@ -143,6 +146,11 @@ namespace HealthSanctuary.Web
         {
             services.AddTransient<IWorkoutService, WorkoutService>();
             services.AddTransient<IExerciseService, ExerciseService>();
+        }
+
+        private void AddStartupTasks(IServiceCollection services)
+        {
+            services.AddTransient<IStartupTask, DatabaseSeeder>();
         }
 
         private void AddAutoMapper(IServiceCollection services)
