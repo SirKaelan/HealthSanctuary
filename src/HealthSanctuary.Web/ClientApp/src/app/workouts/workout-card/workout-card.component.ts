@@ -34,4 +34,8 @@ export class WorkoutCardComponent implements OnInit {
       .subscribe(_ => this.refresh.next());
   }
 
+  private onView() {
+    this.router.navigateByUrl(`workouts/${this.workout.workoutId}`);
+  }
+
 }

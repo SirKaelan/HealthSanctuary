@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatAutocompleteModule, MatProgressSpinnerModule } from '@angular/material';
 
 import { WorkoutsRoutingModule } from './workouts-routing.module';
@@ -16,6 +17,7 @@ import { WorkoutsLayoutComponent } from './workouts-layout/workouts-layout.compo
 import { WorkoutCreateComponent } from './workout-create/workout-create.component';
 import { EmbedPipe } from './embed.pipe';
 import { WorkoutEditComponent } from './workout-edit/workout-edit.component';
+import { WorkoutShowComponent } from './workout-show/workout-show.component';
 
 
 @NgModule({
@@ -26,7 +28,8 @@ import { WorkoutEditComponent } from './workout-edit/workout-edit.component';
     WorkoutsLayoutComponent,
     WorkoutCreateComponent,
     EmbedPipe,
-    WorkoutEditComponent
+    WorkoutEditComponent,
+    WorkoutShowComponent
   ],
   imports: [
     CommonModule,
@@ -36,6 +39,7 @@ import { WorkoutEditComponent } from './workout-edit/workout-edit.component';
     MatButtonModule,
     MatInputModule,
     MatIconModule,
+    MatExpansionModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
     WorkoutsRoutingModule,

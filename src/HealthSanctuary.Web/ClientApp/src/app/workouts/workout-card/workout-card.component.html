@@ -9,7 +9,7 @@
     </p>
   </mat-card-content>
   <mat-card-actions class="action-buttons">
-    <button mat-button>View</button>
+    <button mat-button (click)="onView()">View</button>
     <button mat-icon-button *ngIf="isOwner()" (click)="onEdit()">
       <mat-icon>edit</mat-icon>
     </button>

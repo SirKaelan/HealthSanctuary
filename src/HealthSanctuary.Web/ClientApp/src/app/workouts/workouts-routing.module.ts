@@ -6,11 +6,13 @@ import { WorkoutCreateComponent } from './workout-create/workout-create.componen
 import { AuthGuard } from '../shared/auth.guard';
 import { WorkoutEditComponent } from './workout-edit/workout-edit.component';
 import { WorkoutResolver } from './workout.resolver';
+import { WorkoutShowComponent } from './workout-show/workout-show.component';
 
 const routes: Routes = [
   { path: '', component: WorkoutsLayoutComponent },
   { path: 'workouts', component: WorkoutsLayoutComponent },
   { path: 'workout-create', component: WorkoutCreateComponent, canActivate: [AuthGuard] },
+  { path: 'workouts/:workoutId', component: WorkoutShowComponent, resolve: { workout: WorkoutResolver } },
   { path: 'workouts/:workoutId/edit', component: WorkoutEditComponent, canActivate: [AuthGuard], resolve: { workout: WorkoutResolver} },
 ];
 

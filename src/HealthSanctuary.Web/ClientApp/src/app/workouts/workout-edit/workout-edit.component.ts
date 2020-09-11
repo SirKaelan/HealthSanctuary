@@ -118,6 +118,6 @@ export class WorkoutEditComponent implements OnInit {
 
     this.workoutService
       .updateWorkout(workout)
-      .subscribe(res => this.router.navigateByUrl('/workouts'));
+      .subscribe(res => this.router.navigateByUrl(`workouts/${this.workout.get('workoutId').value}`));
   }
 }

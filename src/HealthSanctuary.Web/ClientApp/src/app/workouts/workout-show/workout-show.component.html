@@ -1,0 +1,32 @@
+<div class="title"> 
+  <h2 class=".mat-h2">{{ workout.title }}</h2>
+  <button mat-icon-button *ngIf="isOwner()" (click)="onEdit()">
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button mat-icon-button *ngIf="isOwner()" (click)="onDelete()">
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>
+
+<h4 class=".mat-h4">Duration: {{ workout.duration }} min.</h4>
+
+<p class=".mat-body">Description: {{ workout.description }}</p>
+
+<iframe class="workout-video" width="560" height="315" frameborder='0' scrolling='no' [src]="workout.videoLink | embed" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<mat-accordion>
+  <ng-container *ngFor="let exercise of workout.workoutExercises">
+    <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ exercise.exercise.name }}
+        </mat-panel-title>
+        <mat-panel-description>
+          Reps: {{ exercise.reps }} | Sets: {{ exercise.sets }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <p>Description: {{ exercise.exercise.description }}</p>
+      <iframe class="workout-video" width="560" height="315" frameborder='0' scrolling='no' [src]="exercise.exercise.videoLink | embed" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </mat-expansion-panel>
+  </ng-container>
+</mat-accordion>
