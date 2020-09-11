@@ -4,14 +4,16 @@ using HealthSanctuary.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HealthSanctuary.Data.Migrations
 {
     [DbContext(typeof(HealthSanctuaryContext))]
-    partial class HealthSanctuaryContextModelSnapshot : ModelSnapshot
+    [Migration("20200911175411_AddMeals")]
+    partial class AddMeals
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,9 +96,6 @@ namespace HealthSanctuary.Data.Migrations
                     b.Property<DateTime>("AddedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<TimeSpan>("AverageDuration")
-                        .HasColumnType("time");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
@@ -129,16 +128,13 @@ namespace HealthSanctuary.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("KCal")
                         .HasColumnType("float");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<TimeSpan>("ReadyIn")
                         .HasColumnType("time");
@@ -171,7 +167,7 @@ namespace HealthSanctuary.Data.Migrations
                     b.Property<int>("Likes")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MealId")
+                    b.Property<int>("MealId")
                         .HasColumnType("int");
 
                     b.Property<string>("OwnerId")
@@ -436,7 +432,9 @@ namespace HealthSanctuary.Data.Migrations
                 {
                     b.HasOne("HealthSanctuary.Core.Models.Meal", "Meal")
                         .WithMany("Workouts")
-                        .HasForeignKey("MealId");
+                        .HasForeignKey("MealId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("HealthSanctuary.Core.Models.WorkoutExercise", b =>

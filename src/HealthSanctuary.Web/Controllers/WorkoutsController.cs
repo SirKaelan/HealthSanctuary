@@ -14,7 +14,7 @@ namespace HealthSanctuary.Web.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class WorkoutsController : ODataController
+    public class WorkoutsController : ControllerBase
     {
         private readonly IWorkoutService _workoutService;
         private readonly IWorkoutMapper _workoutMapper;
@@ -30,6 +30,7 @@ namespace HealthSanctuary.Web.Controllers
         [HttpGet]
         [AllowAnonymous]
         [EnableQuery]
+        //[ApiExplorerSettings(IgnoreApi = true)]
         public IQueryable<Workout> GetWorkouts()
         {
             return _workoutsRepository.GetQueryableWorkouts();
@@ -72,6 +73,24 @@ namespace HealthSanctuary.Web.Controllers
         {
             var userId = HttpContext.GetUserId();
             await _workoutService.DeleteWorkout(workoutId, userId);
+
+            return Ok();
+        }
+
+        [HttpPost("{workoutId}/meals/{mealId}")]
+        public async Task<IActionResult> AddMealToWorkout([FromRoute] int workoutId, [FromRoute] int mealId)
+        {
+            var userId = HttpContext.GetUserId();
+            await _workoutService.AddMeal(workoutId, mealId, userId);
+
+            return Ok();
+        }
+
+        [HttpDelete("{workoutId}/meals")]
+        public async Task<IActionResult> RemoveMealFromWorkout([FromRoute] int workoutId)
+        {
+            var userId = HttpContext.GetUserId();
+            await _workoutService.RemoveMeal(workoutId, userId);
 
             return Ok();
         }

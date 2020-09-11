@@ -34,6 +34,9 @@ namespace HealthSanctuary.Data.Seeders
             var exercises = GetExercises();
             _dbContext.Exercises.AddRange(exercises);
 
+            var meals = GetMeals();
+            _dbContext.Meals.AddRange(meals);
+
             var workouts = GetWorkouts(userId);
             _dbContext.Workouts.AddRange(workouts);
 
@@ -58,48 +61,64 @@ namespace HealthSanctuary.Data.Seeders
                     Name = "Push-Up",
                     Description = "Get on the ground and give me twenty!",
                     VideoLink = "https://www.youtube.com/watch?v=7wblGkVQx3U",
+                    Likes = 200,
+                    AddedOn = new DateTime(2020, 5, 12),
                 },
                 new Exercise
                 {
                     Name = "Pull-Up",
                     Description = "Jump and fly to the bar!",
                     VideoLink = "https://www.youtube.com/watch?v=tB3X4TjTIes",
+                    Likes = 120,
+                    AddedOn = new DateTime(2020, 6, 17),
                 },
                 new Exercise
                 {
                     Name = "Squat",
                     Description = "Bend your knees to 90 degrees.",
                     VideoLink = "https://www.youtube.com/watch?v=tB3X4TjTIes",
+                    Likes = 57,
+                    AddedOn = new DateTime(2020, 5, 24),
                 },
                 new Exercise
                 {
                     Name = "Hand Stand",
                     Description = "Fly like Superman, but but in the wrong direction.",
                     VideoLink = "https://www.youtube.com/watch?v=KNC5lkoE2Fs",
+                    Likes = 265,
+                    AddedOn = new DateTime(2020, 6, 18),
                 },
                 new Exercise
                 {
                     Name = "Planche",
                     Description = "How do you even do it, man?",
                     VideoLink = "https://www.youtube.com/watch?v=OmKfROtB45Q",
+                    Likes = 222,
+                    AddedOn = new DateTime(2020, 7, 2),
                 },
                 new Exercise
                 {
                     Name = "Front Lever",
                     Description = "Hold the scales, be the scales, love the scales.",
                     VideoLink = "https://www.youtube.com/watch?v=Ev2caBjnwRo",
+                    Likes = 24,
+                    AddedOn = new DateTime(2020, 2, 13),
                 },
                 new Exercise
                 {
                     Name = "Pistol Squat",
                     Description = "Pretend you only have one leg.",
                     VideoLink = "https://www.youtube.com/watch?v=flQVCWBuVgk",
+                    Likes = 67,
+                    AddedOn = new DateTime(2020, 8, 5),
                 },
                 new Exercise
                 {
                     Name = "Deadlift",
                     Description = "Keep that back straight.",
                     VideoLink = "https://www.youtube.com/watch?v=SPSKGFbs1aQ",
+                    Likes = 99,
+                    AddedOn = new DateTime(2020, 9, 3),
                 }
             };
         }
@@ -114,6 +133,9 @@ namespace HealthSanctuary.Data.Seeders
                     Description = "The best Home chest workout to achieve real results that you can do anywhere.",
                     Duration = TimeSpan.FromMinutes(35),
                     OwnerId = ownerId,
+                    MealId = 1,
+                    Likes = 200,
+                    AddedOn = new DateTime(2020, 5, 12),
                     VideoLink = "https://www.youtube.com/watch?v=BkS1-El_WlE",
                     WorkoutExercises = new List<WorkoutExercise>
                     {
@@ -143,6 +165,9 @@ namespace HealthSanctuary.Data.Seeders
                     Description = "This Home leg Workout will have you building muscle with only your body weight.",
                     Duration = TimeSpan.FromMinutes(25),
                     OwnerId = ownerId,
+                    MealId = 2,
+                    Likes = 17,
+                    AddedOn = new DateTime(2020, 7, 25),
                     VideoLink = "https://www.youtube.com/watch?v=Jbvb_MMGc8s",
                     WorkoutExercises = new List<WorkoutExercise>
                     {
@@ -166,6 +191,9 @@ namespace HealthSanctuary.Data.Seeders
                     Description = "Gotta build that back like a gate.",
                     Duration = TimeSpan.FromMinutes(45),
                     OwnerId = ownerId,
+                    MealId = 3,
+                    Likes = 256,
+                    AddedOn = new DateTime(2020, 3, 9),
                     VideoLink = "https://www.youtube.com/watch?v=ClzTDsQDC0E",
                     WorkoutExercises = new List<WorkoutExercise>
                     {
@@ -201,6 +229,9 @@ namespace HealthSanctuary.Data.Seeders
                     Description = "The best Home chest workout to achieve real results that you can do anywhere.",
                     Duration = TimeSpan.FromMinutes(35),
                     OwnerId = ownerId,
+                    MealId = 3,
+                    Likes = 523,
+                    AddedOn = new DateTime(2020, 1, 13),
                     VideoLink = "https://www.youtube.com/watch?v=BkS1-El_WlE",
                     WorkoutExercises = new List<WorkoutExercise>
                     {
@@ -230,6 +261,9 @@ namespace HealthSanctuary.Data.Seeders
                     Description = "This Home leg Workout will have you building muscle with only your body weight.",
                     Duration = TimeSpan.FromMinutes(25),
                     OwnerId = ownerId,
+                    MealId = 1,
+                    Likes = 136,
+                    AddedOn = new DateTime(2020, 8, 10),
                     VideoLink = "https://www.youtube.com/watch?v=Jbvb_MMGc8s",
                     WorkoutExercises = new List<WorkoutExercise>
                     {
@@ -253,6 +287,9 @@ namespace HealthSanctuary.Data.Seeders
                     Description = "Gotta build that back like a gate.",
                     Duration = TimeSpan.FromMinutes(45),
                     OwnerId = ownerId,
+                    MealId = 2,
+                    Likes = 189,
+                    AddedOn = new DateTime(2020, 6, 12),
                     VideoLink = "https://www.youtube.com/watch?v=ClzTDsQDC0E",
                     WorkoutExercises = new List<WorkoutExercise>
                     {
@@ -281,6 +318,40 @@ namespace HealthSanctuary.Data.Seeders
                             Sets = 1,
                         },
                     }
+                },
+            };
+        }
+
+        private List<Meal> GetMeals()
+        {
+            return new List<Meal>
+            {
+                new Meal
+                {
+                    Name = "Broccoli with cheeses",
+                    Description = "Steamed broccoli with 4 different kinds of cheeses",
+                    KCal = 870,
+                    Servings = 6,
+                    ReadyIn = TimeSpan.FromMinutes(35),
+                    AddedOn = new DateTime(2020, 4, 21),
+                },
+                new Meal
+                {
+                    Name = "Steak with tomatoe sauce",
+                    Description = "Juicy stake with sour-sweet tomatoe sauce",
+                    KCal = 650,
+                    Servings = 2,
+                    ReadyIn = TimeSpan.FromMinutes(65),
+                    AddedOn = new DateTime(2020, 9, 4),
+                },
+                new Meal
+                {
+                    Name = "Ramen",
+                    Description = "The trade-mark Japanese dish",
+                    KCal = 720,
+                    Servings = 6,
+                    ReadyIn = TimeSpan.FromMinutes(120),
+                    AddedOn = new DateTime(2020, 9, 4),
                 },
             };
         }

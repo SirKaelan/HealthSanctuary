@@ -59,6 +59,24 @@ namespace HealthSanctuary.Core.Services.Workouts
             await _workoutsRepository.SaveChanges();
         }
 
+        public async Task AddMeal(int workoutId, int mealId, string requesterUserId)
+        {
+            var workout = await _workoutsRepository.GetWorkout(workoutId);
+            ValidateWorkoutOwner(workout, requesterUserId);
+
+            workout.MealId = mealId;
+            await _workoutsRepository.SaveChanges();
+        }
+
+        public async Task RemoveMeal(int workoutId, string requesterUserId)
+        {
+            var workout = await _workoutsRepository.GetWorkout(workoutId);
+            ValidateWorkoutOwner(workout, requesterUserId);
+
+            workout.MealId = null;
+            await _workoutsRepository.SaveChanges();
+        }
+
         private void ValidateWorkoutOwner(Workout workout, string requesterUserId)
         {
             if (workout.OwnerId != requesterUserId)

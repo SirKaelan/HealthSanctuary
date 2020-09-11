@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using FluentValidation.AspNetCore;
@@ -7,16 +8,21 @@ using HealthSanctuary.Core.Models;
 using HealthSanctuary.Core.Repositories;
 using HealthSanctuary.Core.Services;
 using HealthSanctuary.Core.Services.Exercises;
+using HealthSanctuary.Core.Services.Meals;
 using HealthSanctuary.Core.Services.Workouts;
 using HealthSanctuary.Data.Context;
 using HealthSanctuary.Data.Repositories;
 using HealthSanctuary.Data.Seeders;
+using HealthSanctuary.Data.Settings;
 using HealthSanctuary.Web.Mappers.Exercises;
+using HealthSanctuary.Web.Mappers.Meals;
 using HealthSanctuary.Web.Mappers.Workouts;
 using HealthSanctuary.Web.Middleware;
 using HealthSanctuary.Web.Models.Exercises;
+using HealthSanctuary.Web.Models.Meals;
 using HealthSanctuary.Web.Models.WorkoutExercises;
 using HealthSanctuary.Web.Models.Workouts;
+using HealthSanctuary.Web.Settings;
 using HealthSanctuary.Web.Validators.Workouts;
 using IdentityServer4.Models;
 using Microsoft.AspNet.OData.Builder;
@@ -24,12 +30,15 @@ using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OData.Edm;
 
 namespace HealthSanctuary.Web
@@ -46,6 +55,7 @@ namespace HealthSanctuary.Web
         public void ConfigureServices(IServiceCollection services)
         {
             AddAuth(services);
+            AddSettings(services);
             AddDbContext(services);
             AddRepositories(services);
             AddMappers(services);
@@ -57,7 +67,11 @@ namespace HealthSanctuary.Web
             services.AddOData();
 
             services
-                .AddControllersWithViews(o => o.Filters.Add(new AuthorizeFilter("ApiScope")))
+                .AddControllersWithViews(o => 
+                {
+                    o.Filters.Add(new AuthorizeFilter("ApiScope"));
+                    AddODataFormatters(o);
+                })
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<WorkoutRequestValidator>());
             services.AddSpaStaticFiles(configuration =>
             {
@@ -114,15 +128,21 @@ namespace HealthSanctuary.Web
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
-            //app.UseSpa(spa =>
-            //{
-            //    spa.Options.SourcePath = "ClientApp";
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "ClientApp";
 
-            //    if (env.IsDevelopment())
-            //    {
-            //        spa.UseAngularCliServer(npmScript: "start");
-            //    }
-            //});
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
+            });
+        }
+
+        private void AddSettings(IServiceCollection services)
+        {
+            var databaseSettings = Configuration.GetSection("Database").Get<DatabaseSettings>();
+            services.AddSingleton<IDatabaseSettings>(_ => databaseSettings);
         }
 
         private void AddDbContext(IServiceCollection services)
@@ -134,18 +154,21 @@ namespace HealthSanctuary.Web
         {
             services.AddTransient<IWorkoutsRepository, WorkoutsRepository>();
             services.AddTransient<IExercisesRepository, ExercisesRepository>();
+            services.AddTransient<IMealsRepository, MealsRepository>();
         }
 
         private void AddMappers(IServiceCollection services)
         {
             services.AddTransient<IWorkoutMapper, WorkoutMapper>();
             services.AddTransient<IExerciseMapper, ExerciseMapper>();
+            services.AddTransient<IMealMapper, MealMapper>();
         }
 
         private void AddServices(IServiceCollection services)
         {
             services.AddTransient<IWorkoutService, WorkoutService>();
             services.AddTransient<IExerciseService, ExerciseService>();
+            services.AddTransient<IMealService, MealService>();
         }
 
         private void AddStartupTasks(IServiceCollection services)
@@ -161,6 +184,7 @@ namespace HealthSanctuary.Web
                     .ForMember(x => x.WorkoutId, x => x.MapFrom((src, dest, member, context) => context.Items[nameof(dest.WorkoutId).ToLower()]))
                     .ForMember(x => x.OwnerId, x => x.MapFrom((src, dest, member, context) => context.Items[nameof(dest.OwnerId).ToLower()]))
                     .ForMember(x => x.Duration, x => x.MapFrom(src => TimeSpan.FromMinutes(src.Duration)))
+                    .ForMember(x => x.AddedOn, x => x.MapFrom((src, dest) => DateTime.UtcNow))
                     .AfterMap((src, dest) => dest.WorkoutExercises.ForEach(we => we.WorkoutId = dest.WorkoutId));
                 cfg.CreateMap<Workout, WorkoutResponse>(MemberList.None)
                     .ForMember(x => x.Duration, x => x.MapFrom(src => src.Duration.TotalMinutes));
@@ -170,8 +194,15 @@ namespace HealthSanctuary.Web
                 cfg.CreateMap<WorkoutExercise, WorkoutExerciseResponse>(MemberList.None);
 
                 cfg.CreateMap<ExerciseRequest, Exercise>(MemberList.None)
+                    .ForMember(x => x.AddedOn, x => x.MapFrom((src, dest) => DateTime.UtcNow))
                     .ForMember(x => x.ExerciseId, x => x.MapFrom((src, dest, member, context) => context.Items[nameof(dest.ExerciseId).ToLower()]));
                 cfg.CreateMap<Exercise, ExerciseResponse>(MemberList.None);
+
+                cfg.CreateMap<MealRequest, Meal>(MemberList.None)
+                    .ForMember(x => x.ReadyIn, x => x.MapFrom(src => TimeSpan.FromMinutes(src.ReadyIn)))
+                    .ForMember(x => x.AddedOn, x => x.MapFrom((src, dest) => DateTime.UtcNow));
+                cfg.CreateMap<Meal, MealResponse>(MemberList.None)
+                    .ForMember(x => x.ReadyIn, x => x.MapFrom(src => src.ReadyIn.TotalMinutes));
             }, new List<Assembly>());
         }
 
@@ -234,6 +265,19 @@ namespace HealthSanctuary.Web
             });
         }
 
+        private void AddODataFormatters(MvcOptions options)
+        {
+            foreach (var outputFormatter in options.OutputFormatters.OfType<OutputFormatter>().Where(x => x.SupportedMediaTypes.Count == 0))
+            {
+                outputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
+            }
+
+            foreach (var inputFormatter in options.InputFormatters.OfType<InputFormatter>().Where(x => x.SupportedMediaTypes.Count == 0))
+            {
+                inputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
+            }
+        }
+
         private IEdmModel GetEdmModel()
         {
             var builder = new ODataConventionModelBuilder();
@@ -241,6 +285,7 @@ namespace HealthSanctuary.Web
             builder.EntitySet<Workout>("Workouts");
             builder.EntitySet<WorkoutExercise>("WorkoutExercises").EntityType.HasKey(x => new { x.WorkoutId, x.ExerciseId });
             builder.EntitySet<Exercise>("Exercises");
+            builder.EntitySet<Meal>("Meals");
             return builder.GetEdmModel();
         }
     }

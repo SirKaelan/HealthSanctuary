@@ -29,6 +29,7 @@ namespace HealthSanctuary.Web.Controllers
         [HttpGet]
         [AllowAnonymous]
         [EnableQuery]
+        //[ApiExplorerSettings(IgnoreApi = true)]
         public IQueryable<Exercise> GetExercises()
         {
             return _exercisesRepository.GetQueryableExercises();

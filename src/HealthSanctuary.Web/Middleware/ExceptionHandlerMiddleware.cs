@@ -33,6 +33,10 @@ namespace HealthSanctuary.Web.Middleware
             {                
                 httpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
             }
+            else if (exception is MealUsedException)
+            {
+                httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
         }
     }
 }
